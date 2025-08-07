@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Login from "../components/Employee/Login";
+import Login from "../../components/Login";
 
 const LandingPage = () => {
   const [showSignupModal, setShowSignupModal] = useState(false);
