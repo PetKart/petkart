@@ -19,7 +19,12 @@ const sidebarLinks = {
     { name: "Dashboard", path: "/petshop/dashboard", icon: Home }
   ],
   SELLER: [
-    { name: "Dashboard", path: "/seller/dashboard", icon: Home }
+    { name: "Dashboard", path: "/seller/dashboard", icon: Home },
+    { name: "Add Pets", path: "/seller/pets", icon: Package },
+    { name: "Add Offers", path: "/seller/offers", icon: Package },
+    { name: "Orders", path: "/seller/orders", icon: Users },
+    { name: "Income", path: "/seller/income", icon: UserCheck },
+    { name: "Articles", path: "/seller/articles", icon: Settings }
   ],
   BUYER: [
     { name: "Dashboard", path: "/buyer/dashboard", icon: Home }
