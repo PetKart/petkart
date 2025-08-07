@@ -13,18 +13,26 @@ const LOGO_SRC = "/assets/logo2.png";
 
 const sidebarLinks = {
   ADMIN: [
-    { name: "Dashboard", path: "/admin/dashboard", icon: Home },
-    { name: "Users", path: "/admin/users", icon: Users },
-    { name: "Settings", path: "/admin/settings", icon: Settings },
+    { name: "Dashboard", path: "/admin/dashboard", icon: Home }
   ],
   PET_SHOP: [
-    { name: "Dashboard", path: "/petshop/dashboard", icon: Home },
-    { name: "Orders", path: "/petshop/orders", icon: Package },
-    { name: "Profile", path: "/petshop/profile", icon: UserCheck },
+    { name: "Dashboard", path: "/petshop/dashboard", icon: Home }
+  ],
+  SELLER: [
+    { name: "Dashboard", path: "/seller/dashboard", icon: Home }
+  ],
+  BUYER: [
+    { name: "Dashboard", path: "/buyer/dashboard", icon: Home }
+    
   ],
 };
 
-function Sidebar({ admin = false, petshop = false }) {
+function Sidebar({
+  admin = false,
+  petshop = false,
+  seller = false,
+  buyer = false,
+}) {
   const { user } = useUser();
   const location = useLocation();
   const { darkMode, toggleTheme } = useTheme();
@@ -36,6 +44,12 @@ function Sidebar({ admin = false, petshop = false }) {
   } else if (petshop) {
     linksToShow = sidebarLinks.PET_SHOP;
     headerLabel = "Petshop: Dasun";
+  } else if (seller) {
+    linksToShow = sidebarLinks.SELLER;
+    headerLabel = "Seller: Ramesh";
+  } else if (buyer) {
+    linksToShow = sidebarLinks.BUYER;
+    headerLabel = "Buyer: Bimsara";
   } else if (user?.role) {
     linksToShow = sidebarLinks[user.role];
     headerLabel =
@@ -43,6 +57,10 @@ function Sidebar({ admin = false, petshop = false }) {
         ? "Admin: Theekshan"
         : user.role === "PET_SHOP"
         ? "Petshop: Dasun"
+        : user.role === "SELLER"
+        ? "Seller: Ramesh"
+        : user.role === "BUYER"
+        ? "Buyer: Bimsara"
         : "";
   }
 

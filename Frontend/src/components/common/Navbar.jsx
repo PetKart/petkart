@@ -3,7 +3,12 @@ import { useTheme } from "../../context/useTheme";
 
 const LOGO_SRC = "/assets/logo2.png"; // Change to your logo path
 
-const Navbar = () => {
+const Navbar = ({
+  admin = false,
+  petshop = false,
+  seller = false,
+  buyer = false,
+}) => {
   const { darkMode } = useTheme();
   // Color palette for light/dark mode
   const light = {
@@ -22,6 +27,12 @@ const Navbar = () => {
   };
   const theme = darkMode ? dark : light;
 
+  let headerLabel = "";
+  if (admin) headerLabel = "Admin: Theekshan";
+  else if (petshop) headerLabel = "Petshop: Dasun";
+  else if (seller) headerLabel = "Seller: Ramesh";
+  else if (buyer) headerLabel = "Buyer: Bimsara";
+
   return (
     <nav
       className="w-full flex items-center justify-between px-6 py-2"
@@ -31,8 +42,8 @@ const Navbar = () => {
         transition: "background 0.3s",
       }}
     >
-      {/* Logo */}
-      <div className="flex items-center">
+      {/* Logo and Role */}
+      <div className="flex items-center space-x-4">
         <img
           src={LOGO_SRC}
           alt="Logo"
@@ -43,6 +54,14 @@ const Navbar = () => {
             boxShadow: theme.shadow,
           }}
         />
+        {headerLabel && (
+          <span
+            className="font-semibold text-base"
+            style={{ color: theme.icon }}
+          >
+            {headerLabel}
+          </span>
+        )}
       </div>
       {/* Right icons */}
       <div className="flex items-center space-x-6">
