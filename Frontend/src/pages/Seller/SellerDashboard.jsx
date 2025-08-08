@@ -2,6 +2,12 @@ import React from 'react';
 import { TrendingUp, Package, DollarSign, FileText, Eye, Calendar } from 'lucide-react';
 
 const SellerDashboard = () => {
+<<<<<<< HEAD
+  return (
+    <div>
+      <h1>Seller Dashboard</h1>
+      <p>Welcome to the Seller Dashboard!</p>
+=======
   const stats = [
     {
       title: 'Total Orders',
@@ -169,6 +175,7 @@ const SellerDashboard = () => {
           </div>
         </div>
       </div>
+>>>>>>> 691f6f758b449be64afb977fe32c71a3c2dabbc5
     </div>
   );
 };

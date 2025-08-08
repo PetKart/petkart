@@ -3,6 +3,12 @@ import { Check, X, Eye, Clock, CheckCircle, Calendar, User, Package } from 'luci
 import toast from 'react-hot-toast';
 
 const SellerOrders = () => {
+<<<<<<< HEAD
+  return (
+    <div>
+      <h1>Seller Orders</h1>
+      <p>Welcome to the Seller Orders page!</p>
+=======
   const [activeTab, setActiveTab] = useState('requested');
   const [selectedOrder, setSelectedOrder] = useState(null);
 
@@ -382,6 +388,7 @@ const SellerOrders = () => {
           </div>
         </div>
       )}
+>>>>>>> 691f6f758b449be64afb977fe32c71a3c2dabbc5
     </div>
   );
 };

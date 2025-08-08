@@ -9,6 +9,7 @@ import SellerArticles from "../pages/Seller/SellerArticles";
 
 const SellerRoutes = () => (
   <Routes>
+
     <Route path="/" element={<SellerDashboard />} />
     <Route path="/dashboard" element={<SellerDashboard/>}/>
     <Route path="/pets" element={<SellerAddPets/>}  />

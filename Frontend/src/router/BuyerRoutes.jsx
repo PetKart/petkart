@@ -6,9 +6,9 @@ import BuyerProfile from "../pages/Buyer/BuyerProfile";
 
 const BuyerRoutes = () => (
   <Routes>
-    <Route path="/buyer/dashboard" element={<BuyerDashboard />} />
-    <Route path="/buyer/orders" element={<BuyerOrders />} />
-    <Route path="/buyer/profile" element={<BuyerProfile />} />
+    <Route path="dashboard" element={<BuyerDashboard />} />
+    <Route path="orders" element={<BuyerOrders />} />
+    <Route path="profile" element={<BuyerProfile />} />
   </Routes>
 );
 
