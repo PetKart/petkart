@@ -4,8 +4,8 @@ import toast from 'react-hot-toast';
 
 const SellerArticles = () => {
   const [showModal, setShowModal] = useState(false);
-  const [editingArticle, setEditingArticle] = useState<Article | null>(null);
-  const [viewingArticle, setViewingArticle] = useState<Article | null>(null);
+  const [editingArticle, setEditingArticle] = useState(null);
+  const [viewingArticle, setViewingArticle] = useState(null);
 
   const [articles, setArticles] = useState([
     {
@@ -115,11 +115,7 @@ const SellerArticles = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Article Management</h1>
-          <p className="text-gray-600">Create and manage educational articles about pets</p>
-        </div>
+      <div className="flex items-center justify-end">
         <button
           onClick={() => {
             setFormData({
@@ -267,7 +263,7 @@ const SellerArticles = () => {
 
       {/* Add/Edit Article Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 transition-opacity duration-300 ease-in-out">
           <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-6">

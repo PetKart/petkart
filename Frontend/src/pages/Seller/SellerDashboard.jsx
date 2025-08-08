@@ -21,7 +21,7 @@ const SellerDashboard = () => {
     },
     {
       title: 'Total Income',
-      value: '$12,450',
+      value: 'Rs.12,450',
       change: '+18%',
       icon: DollarSign,
       color: 'text-purple-600',
@@ -42,7 +42,7 @@ const SellerDashboard = () => {
       id: 'ORD-001',
       petName: 'Golden Retriever Puppy',
       buyer: 'John Smith',
-      amount: '$850',
+      amount: 'Rs.850',
       date: '2024-01-15',
       status: 'Completed'
     },
@@ -50,7 +50,7 @@ const SellerDashboard = () => {
       id: 'ORD-002',
       petName: 'Persian Cat',
       buyer: 'Emily Davis',
-      amount: '$650',
+      amount: 'Rs.650',
       date: '2024-01-14',
       status: 'Pending'
     },
@@ -58,7 +58,7 @@ const SellerDashboard = () => {
       id: 'ORD-003',
       petName: 'German Shepherd',
       buyer: 'Michael Brown',
-      amount: '$1,200',
+      amount: 'Rs.1,200',
       date: '2024-01-13',
       status: 'Completed'
     },
@@ -66,7 +66,7 @@ const SellerDashboard = () => {
       id: 'ORD-004',
       petName: 'Maine Coon',
       buyer: 'Sarah Wilson',
-      amount: '$750',
+      amount: 'Rs.750',
       date: '2024-01-12',
       status: 'Requested'
     },
@@ -81,18 +81,6 @@ const SellerDashboard = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600">Welcome back! Here's what's happening with your store.</p>
-        </div>
-        <div className="flex items-center space-x-2 text-sm text-gray-500">
-          <Calendar size={16} />
-          <span>Last updated: {new Date().toLocaleDateString()}</span>
-        </div>
-      </div>
-
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => {
@@ -103,10 +91,6 @@ const SellerDashboard = () => {
                 <div>
                   <p className="text-sm font-medium text-gray-600">{stat.title}</p>
                   <p className="text-3xl font-bold text-gray-900 mt-2">{stat.value}</p>
-                  <p className="text-sm text-green-600 mt-1 flex items-center">
-                    <TrendingUp size={12} className="mr-1" />
-                    {stat.change} from last month
-                  </p>
                 </div>
                 <div className={`${stat.bgColor} ${stat.color} p-3 rounded-full`}>
                   <Icon size={24} />

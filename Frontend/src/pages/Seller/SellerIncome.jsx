@@ -77,12 +77,6 @@ const SellerIncome  = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Income Dashboard</h1>
-        <p className="text-gray-600">Track your earnings and request detailed reports</p>
-      </div>
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Side - Income Overview */}
         <div className="lg:col-span-2 space-y-6">
@@ -91,11 +85,7 @@ const SellerIncome  = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-purple-100 text-sm font-medium">Total Income</p>
-                <p className="text-4xl font-bold">${totalIncome.toLocaleString()}</p>
-                <p className="text-purple-100 text-sm flex items-center mt-2">
-                  <TrendingUp size={16} className="mr-1" />
-                  +23% from last month
-                </p>
+                <p className="text-4xl font-bold">Rs.{totalIncome.toLocaleString()}</p>
               </div>
               <div className="bg-white bg-opacity-20 p-3 rounded-full">
                 <DollarSign size={32} />
