@@ -56,15 +56,15 @@ const SellerAddPets = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (!formData.name || !formData.age || !formData.price) {
       toast.error('Please fill in all required fields');
       return;
     }
 
     if (editingPet) {
-      setPets(pets.map(pet => 
-        pet.id === editingPet.id 
+      setPets(pets.map(pet =>
+        pet.id === editingPet.id
           ? { ...formData, id: editingPet.id }
           : pet
       ));
@@ -106,7 +106,7 @@ const SellerAddPets = () => {
 
   const filteredPets = pets.filter(pet => {
     const matchesSearch = pet.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         pet.type.toLowerCase().includes(searchTerm.toLowerCase());
+      pet.type.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterType === 'all' || pet.type === filterType;
     return matchesSearch && matchesFilter;
   });
@@ -116,11 +116,7 @@ const SellerAddPets = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Manage Pets</h1>
-          <p className="text-gray-600">Add, edit, and manage your pet listings</p>
-        </div>
+      <div className="flex items-center justify-end">
         <button
           onClick={() => {
             setFormData({
@@ -159,7 +155,7 @@ const SellerAddPets = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Total Value</p>
-              <p className="text-3xl font-bold text-gray-900">${totalValue.toLocaleString()}</p>
+              <p className="text-3xl font-bold text-gray-900">Rs.{totalValue.toLocaleString()}</p>
             </div>
             <div className="bg-green-100 text-green-600 p-3 rounded-full">
               <Plus size={24} />
@@ -279,129 +275,118 @@ const SellerAddPets = () => {
 
       {/* Add/Edit Pet Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 transition-opacity duration-300 ease-in-out">
+          <div className="w-full max-w-2xl bg-white rounded-xl shadow-xl overflow-hidden">
+            <div className="p-6 max-h-[90vh] overflow-y-auto">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-6">
                 {editingPet ? 'Edit Pet' : 'Add New Pet'}
               </h2>
-              
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Name */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Pet Name *
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Pet Name *</label>
                     <input
                       type="text"
                       value={formData.name}
-                      onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      required
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
                     />
                   </div>
-                  
+
+                  {/* Age */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Age *
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Age *</label>
                     <input
                       type="text"
                       value={formData.age}
-                      onChange={(e) => setFormData({...formData, age: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      placeholder="e.g., 3 months, 2 years"
-                      required
+                      onChange={(e) => setFormData({ ...formData, age: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
                     />
                   </div>
-                  
+
+                  {/* Price */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Price *
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Price *</label>
                     <input
                       type="text"
                       value={formData.price}
-                      onChange={(e) => setFormData({...formData, price: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      placeholder="e.g., $850"
-                      required
+                      onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
                     />
                   </div>
-                  
+
+                  {/* Type */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Type *
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Type *</label>
                     <select
                       value={formData.type}
-                      onChange={(e) => setFormData({...formData, type: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      required
+                      onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
                     >
-                      {petTypes.map(type => (
-                        <option key={type} value={type}>{type}</option>
+                      {petTypes.map((type) => (
+                        <option key={type} value={type}>
+                          {type}
+                        </option>
                       ))}
                     </select>
                   </div>
-                  
+
+                  {/* Gender */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Gender *
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Gender *</label>
                     <select
                       value={formData.gender}
-                      onChange={(e) => setFormData({...formData, gender: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      required
+                      onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
                     >
-                      {genders.map(gender => (
-                        <option key={gender} value={gender}>{gender}</option>
+                      {genders.map((gender) => (
+                        <option key={gender} value={gender}>
+                          {gender}
+                        </option>
                       ))}
                     </select>
                   </div>
-                  
+
+                  {/* Image URL */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Image URL
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
                     <input
                       type="url"
                       value={formData.image}
-                      onChange={(e) => setFormData({...formData, image: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      placeholder="https://example.com/image.jpg"
+                      onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
                     />
                   </div>
                 </div>
-                
+
+                {/* Description */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Description
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                   <textarea
                     value={formData.description}
-                    onChange={(e) => setFormData({...formData, description: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    placeholder="Describe the pet's characteristics, behavior, etc."
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   />
                 </div>
-                
-                <div className="flex justify-end space-x-4 mt-6">
+
+                {/* Buttons */}
+                <div className="flex justify-end space-x-4">
                   <button
                     type="button"
                     onClick={() => {
                       setShowModal(false);
                       setEditingPet(null);
                     }}
-                    className="px-4 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors duration-200"
+                    className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors duration-200"
+                    className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg"
                   >
                     {editingPet ? 'Update Pet' : 'Add Pet'}
                   </button>
@@ -411,6 +396,7 @@ const SellerAddPets = () => {
           </div>
         </div>
       )}
+
     </div>
   );
 };

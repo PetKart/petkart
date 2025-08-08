@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 
 const SellerOrders = () => {
   const [activeTab, setActiveTab] = useState('requested');
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   const [orders, setOrders] = useState([
     {
@@ -99,12 +99,6 @@ const SellerOrders = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Order Management</h1>
-        <p className="text-gray-600">Manage incoming orders and track their progress</p>
-      </div>
-
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white rounded-lg shadow-md p-6">

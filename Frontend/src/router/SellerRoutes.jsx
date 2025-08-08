@@ -9,13 +9,13 @@ import SellerArticles from "../pages/Seller/SellerArticles";
 
 const SellerRoutes = () => (
   <Routes>
-    <Route path="/seller" element={<SellerDashboard />} />
-    <Route path="/seller/dashboard" element={<SellerDashboard/>}/>
-    <Route path="/seller/pets" element={<SellerAddPets/>}  />
-    <Route path="/seller/offers" element={<SellerAddOffers/>}  />
-    <Route path="/seller/orders" element={<SellerOrders/>}  />
-    <Route path="/seller/income" element={<SellerIncome/>}  />
-    <Route path="/seller/articles" element={<SellerArticles/>}  />
+    <Route path="/" element={<SellerDashboard />} />
+    <Route path="/dashboard" element={<SellerDashboard/>}/>
+    <Route path="/pets" element={<SellerAddPets/>}  />
+    <Route path="/offers" element={<SellerAddOffers/>}  />
+    <Route path="/orders" element={<SellerOrders/>}  />
+    <Route path="/income" element={<SellerIncome/>}  />
+    <Route path="/articles" element={<SellerArticles/>}  />
   </Routes>
 );
 

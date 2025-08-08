@@ -93,12 +93,6 @@ const SellerAddOffers = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Manage Offers</h1>
-        <p className="text-gray-600">Create and manage promotional offers for your pets</p>
-      </div>
-
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Column - Add/Edit Form */}
         <div className="bg-white rounded-lg shadow-md p-6">
