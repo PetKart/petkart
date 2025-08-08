@@ -15,6 +15,13 @@ export const UserProvider = ({ children }) => {
   // Helper function to check role (can be used for any role check)
   const checkRole = (roleToCheck) => user.role === roleToCheck;
 
+  // Logout function to clear the user state
+  const logout = () => {
+    setUser(null);
+    // In a real app, you would also clear any tokens from localStorage/sessionStorage
+    // localStorage.removeItem('token');
+  };
+
   // User context with all necessary functions
   const userContextValue = {
     user,
@@ -24,6 +31,7 @@ export const UserProvider = ({ children }) => {
     isBuyer: checkRole("BUYER"),
     isPetShop: checkRole("PET_SHOP"),
     checkRole, // General purpose function for any role check
+    logout, // Logout function to clear user state
   };
 
   return (

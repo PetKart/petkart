@@ -110,7 +110,7 @@ function Sidebar({
             >
               <img
                 src={LOGO_SRC}
-                alt="PureLeaf Logo"
+                alt=""
                 className="w-9 h-9 object-contain"
               />
             </div>
