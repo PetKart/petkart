@@ -6,9 +6,9 @@ import SellerProfile from "../pages/Seller/SellerProfile";
 
 const SellerRoutes = () => (
   <Routes>
-    <Route path="/seller/dashboard" element={<SellerDashboard />} />
-    <Route path="/seller/orders" element={<SellerOrders />} />
-    <Route path="/seller/profile" element={<SellerProfile />} />
+    <Route path="dashboard" element={<SellerDashboard />} />
+    <Route path="orders" element={<SellerOrders />} />
+    <Route path="profile" element={<SellerProfile />} />
   </Routes>
 );
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import PetshopDashboard from "../pages/PetShop/PetShopDashboard";
+import PetshopDashboard from "../pages/PetShop/PetshopDashboard";
 
 const PetShopRoutes = () => (
   <Routes>

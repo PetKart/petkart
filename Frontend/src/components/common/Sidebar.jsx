@@ -12,19 +12,14 @@ const ACCENT_COLOR = "#104137";
 const LOGO_SRC = "/assets/logo2.png";
 
 const sidebarLinks = {
-  ADMIN: [
-    { name: "Dashboard", path: "/admin/dashboard", icon: Home }
-  ],
-  PET_SHOP: [
-    { name: "Dashboard", path: "/petshop/dashboard", icon: Home }
-  ],
+  ADMIN: [{ name: "Dashboard", path: "/admin/dashboard", icon: Home }],
+  PET_SHOP: [{ name: "Dashboard", path: "/petshop/dashboard", icon: Home }],
   SELLER: [
-    { name: "Dashboard", path: "/seller/dashboard", icon: Home }
+    { name: "Dashboard", path: "/seller/dashboard", icon: Home },
+    { name: "Orders", path: "/seller/orders", icon: Package },
+    { name: "Profile", path: "/seller/profile", icon: UserCheck },
   ],
-  BUYER: [
-    { name: "Dashboard", path: "/buyer/dashboard", icon: Home }
-    
-  ],
+  BUYER: [{ name: "Dashboard", path: "/buyer/dashboard", icon: Home }],
 };
 
 function Sidebar({
