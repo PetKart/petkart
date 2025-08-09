@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { login, signup } from "../api/auth";
 
 const Navbar = ({ showSignupModal = false, setShowSignupModal = () => {} }) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -16,18 +17,19 @@ const Navbar = ({ showSignupModal = false, setShowSignupModal = () => {} }) => {
     address: "",
     city: "",
     postalCode: "",
-    // User Role Options
     isSeller: false,
     isBuyer: false,
     isPetShop: false,
     isBoth: false,
-    // Pet Shop Details (only visible when isPetShop is true)
     shopName: "",
     shopLicense: "",
     shopDescription: "",
     yearsInBusiness: "",
     specialties: "",
+    password: "",
   });
+  const [loginError, setLoginError] = useState("");
+  const [signupError, setSignupError] = useState("");
 
   const openLoginModal = () => setShowLoginModal(true);
   const closeLoginModal = () => setShowLoginModal(false);
@@ -57,11 +59,21 @@ const Navbar = ({ showSignupModal = false, setShowSignupModal = () => {} }) => {
     });
   };
 
-  const handleGetStartedSubmit = (e) => {
+  const handleGetStartedSubmit = async (e) => {
     e.preventDefault();
-    console.log("Get Started form submitted:", getStartedForm);
-    alert("Thank you for your interest! We will contact you soon.");
-    closeGetStartedModal();
+    setSignupError("");
+    try {
+      const res = await signup(getStartedForm);
+      if (res.id) {
+        alert("Signup successful! Please login.");
+        closeGetStartedModal();
+        setShowLoginModal(true);
+      } else {
+        setSignupError(res);
+      }
+    } catch (err) {
+      setSignupError("Signup failed. Please try again.");
+    }
   };
 
   const handleGetStartedInputChange = (e) => {
@@ -80,11 +92,20 @@ const Navbar = ({ showSignupModal = false, setShowSignupModal = () => {} }) => {
     }));
   };
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log("Login form submitted:", loginForm);
-    closeLoginModal();
+    setLoginError("");
+    try {
+      const res = await login(loginForm);
+      if (res.id) {
+        // TODO: Set user context or redirect
+        closeLoginModal();
+      } else {
+        setLoginError(res);
+      }
+    } catch (err) {
+      setLoginError("Login failed. Please try again.");
+    }
   };
 
   return (
@@ -149,6 +170,14 @@ const Navbar = ({ showSignupModal = false, setShowSignupModal = () => {} }) => {
               </button>
             </div>
             <form className="login-form" onSubmit={handleLoginSubmit}>
+              {loginError && (
+                <div
+                  className="error-message"
+                  style={{ color: "red", marginBottom: "8px" }}
+                >
+                  {loginError}
+                </div>
+              )}
               <div className="form-group">
                 <label htmlFor="email">📧 Email Address *</label>
                 <input
@@ -238,6 +267,14 @@ const Navbar = ({ showSignupModal = false, setShowSignupModal = () => {} }) => {
               className="get-started-form"
               onSubmit={handleGetStartedSubmit}
             >
+              {signupError && (
+                <div
+                  className="error-message"
+                  style={{ color: "red", marginBottom: "8px" }}
+                >
+                  {signupError}
+                </div>
+              )}
               {/* Personal Information Section */}
               <div className="form-section">
                 <h3 className="section-title">👤 Personal Information</h3>
@@ -306,6 +343,20 @@ const Navbar = ({ showSignupModal = false, setShowSignupModal = () => {} }) => {
                     value={getStartedForm.dateOfBirth}
                     onChange={handleGetStartedInputChange}
                     autoComplete="bday"
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="signupPassword">🔒 Password *</label>
+                  <input
+                    type="password"
+                    id="signupPassword"
+                    name="password"
+                    value={getStartedForm.password}
+                    onChange={handleGetStartedInputChange}
+                    required
+                    placeholder="Create a password"
+                    autoComplete="new-password"
+                    minLength="6"
                   />
                 </div>
               </div>
@@ -523,18 +574,8 @@ const Navbar = ({ showSignupModal = false, setShowSignupModal = () => {} }) => {
                 </div>
               </div>
 
-              {/* Terms Agreement */}
-              <div className="form-agreement">
-                <label className="checkbox-label">
-                  <input type="checkbox" required />
-                  <span className="checkmark"></span>✅ I agree to the{" "}
-                  <a href="#">Terms of Service</a> and{" "}
-                  <a href="#">Privacy Policy</a>
-                </label>
-              </div>
-
               <button type="submit" className="get-started-button">
-                🚀 Submit My Application
+                Signup
               </button>
 
               <p className="login-text">
