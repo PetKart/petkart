@@ -7,11 +7,9 @@ import { useTheme } from "../../context/useTheme";
 // Custom Accent Green
 const ACCENT_COLOR = "#104137";
 
-// Import the logo directly
-import logo from "../../assets/petkart.png";
-
 // For your project logo, adjust the src path to match your assets location.
-const LOGO_SRC = logo;
+// Example: "/assets/logo.png"
+const LOGO_SRC = "/assets/logo2.png";
 
 const sidebarLinks = {
   ADMIN: [{ name: "Dashboard", path: "/admin/dashboard", icon: Home }],
@@ -22,9 +20,12 @@ const sidebarLinks = {
     { name: "Add Offers", path: "/seller/offers", icon: Package },
     { name: "Orders", path: "/seller/orders", icon: Users },
     { name: "Income", path: "/seller/income", icon: UserCheck },
-    { name: "Articles", path: "/seller/articles", icon: Settings },
+    { name: "Articles", path: "/seller/articles", icon: Settings }
   ],
-  BUYER: [{ name: "Dashboard", path: "/buyer/dashboard", icon: Home }],
+  BUYER: [
+    { name: "Dashboard", path: "/buyer/dashboard", icon: Home }
+  ],
+
 };
 
 function Sidebar({
@@ -107,7 +108,11 @@ function Sidebar({
               className="bg-white rounded-lg flex items-center justify-center w-12 h-12 shadow"
               style={{ boxShadow: theme.shadow }}
             >
-              <img src={LOGO_SRC} alt="" className="w-9 h-9 object-contain" />
+              <img
+                src={LOGO_SRC}
+                alt=""
+                className="w-9 h-9 object-contain"
+              />
             </div>
             <div>
               <h3 className="text-xl font-bold" style={{ color: theme.text }}>

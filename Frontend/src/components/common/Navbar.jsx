@@ -2,8 +2,24 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../context/useTheme";
 import { useUser } from "../../context/useUser";
+import { 
+  Bell, 
+  User, 
+  LogOut, 
+  Settings, 
+  Calendar,
+  Search,
+  MessageSquare,
+  Shield,
+  Sun,
+  Moon,
+  ChevronDown,
+  Mail,
+  Phone,
+  Globe
+} from "lucide-react";
 
-const LOGO_SRC = "/assets/logo2.png"; // Change to your logo path
+const LOGO_SRC = "/assets/logo2.png";
 
 const Navbar = ({
   admin = false,
@@ -11,7 +27,7 @@ const Navbar = ({
   seller = false,
   buyer = false,
 }) => {
-  const { darkMode } = useTheme();
+  const { darkMode, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const { logout } = useUser();
 
@@ -20,498 +36,371 @@ const Navbar = ({
     {
       id: 1,
       type: "message",
-      content: "New message from Sarah",
+      title: "New Message",
+      content: "Sarah sent you a message about pet adoption",
       time: "5 min ago",
       read: false,
+      icon: MessageSquare,
+      color: "blue"
     },
     {
       id: 2,
       type: "order",
-      content: "Your order #45678 has been shipped",
+      title: "Order Update",
+      content: "Your order #45678 has been shipped and is on the way",
       time: "2 hours ago",
       read: false,
+      icon: Bell,
+      color: "green"
     },
     {
       id: 3,
-      type: "alert",
-      content: "Password changed successfully",
+      type: "security",
+      title: "Security Alert",
+      content: "Password changed successfully from new device",
       time: "Yesterday",
       read: true,
+      icon: Shield,
+      color: "amber"
     },
     {
       id: 4,
       type: "system",
-      content: "System maintenance scheduled",
+      title: "System Maintenance",
+      content: "Scheduled maintenance on Sunday 2:00 AM - 4:00 AM",
       time: "3 days ago",
       read: true,
+      icon: Settings,
+      color: "gray"
     },
   ];
 
-  // Count unread notifications
-  const unreadCount = notifications.filter(
-    (notification) => !notification.read
-  ).length;
+  const unreadCount = notifications.filter(n => !n.read).length;
 
-  // State for current date
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const [searchFocused, setSearchFocused] = useState(false);
+  
+  const dropdownRef = useRef(null);
+  const notificationRef = useRef(null);
 
-  // Update date every minute
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentDate(new Date());
-    }, 60000); // Update every minute
-
-    return () => {
-      clearInterval(timer);
-    };
+    }, 60000);
+    return () => clearInterval(timer);
   }, []);
-
-  // Format date: August 8, 2025
-  const formattedDate = currentDate.toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-
-  // Shorter date format for mobile: Aug 8, 2025
-  const shortFormattedDate = currentDate.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-
-  // Color palette for light/dark mode
-  const light = {
-    bg: "#fff",
-    icon: "#7c3aed",
-    logoBg: "#fff",
-    border: "#a78bfa",
-    shadow: "0 2px 8px 0 rgba(124,58,237,0.10)",
-  };
-  const dark = {
-    bg: "#7c3aed",
-    icon: "#fff",
-    logoBg: "#7c3aed",
-    border: "#a78bfa",
-    shadow: "0 2px 8px 0 rgba(0,0,0,0.15)",
-  };
-  const theme = darkMode ? dark : light;
-
-  let headerLabel = "";
-  if (admin) headerLabel = "Admin: Theekshan";
-  else if (petshop) headerLabel = "Petshop: Dasun";
-  else if (seller) headerLabel = "Seller: Ramesh";
-  else if (buyer) headerLabel = "Buyer: Bimsara";
-
-  // Dropdown state and outside click handler
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [notificationOpen, setNotificationOpen] = useState(false);
-  const dropdownRef = useRef(null);
-  const notificationRef = useRef(null);
 
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownOpen(false);
       }
-      if (
-        notificationRef.current &&
-        !notificationRef.current.contains(event.target)
-      ) {
+      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
         setNotificationOpen(false);
       }
     }
     if (dropdownOpen || notificationOpen) {
       document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
     }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [dropdownOpen, notificationOpen]);
 
+  const formattedDate = currentDate.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+
+  const formattedTime = currentDate.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  let userInfo = {
+    name: "",
+    role: "",
+    initials: "",
+    roleColor: ""
+  };
+
+  if (admin) {
+    userInfo = { name: "Theekshana", role: "System Administrator", initials: "TK", roleColor: "bg-purple-600" };
+  } else if (petshop) {
+    userInfo = { name: "Dasun", role: "Pet Shop Manager", initials: "DS", roleColor: "bg-blue-600" };
+  } else if (seller) {
+    userInfo = { name: "Ramesh", role: "Pet Seller", initials: "RM", roleColor: "bg-green-600" };
+  } else if (buyer) {
+    userInfo = { name: "Bimsara", role: "Pet Buyer", initials: "BM", roleColor: "bg-orange-600" };
+  }
+
+  const getNotificationColor = (color) => {
+    const colors = {
+      blue: "bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300",
+      green: "bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-300",
+      amber: "bg-amber-100 text-amber-600 dark:bg-amber-900 dark:text-amber-300",
+      gray: "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300"
+    };
+    return colors[color] || colors.gray;
+  };
+
   return (
-    <nav
-      className="w-full flex items-center justify-between px-6 py-2"
-      style={{
-        background: theme.bg,
-        minHeight: 60,
-        transition: "background 0.3s",
-      }}
-    >
-      {/* Logo and Role */}
-      <div className="flex items-center space-x-4">
-        <img
-          src={LOGO_SRC}
-          alt="Logo"
-          className="h-10 w-10 rounded-full object-contain"
-          style={{
-            background: theme.logoBg,
-            padding: 4,
-            boxShadow: theme.shadow,
-          }}
-        />
-        {headerLabel && (
-          <span
-            className="font-semibold text-base"
-            style={{ color: theme.icon }}
-          >
-            {headerLabel}
-          </span>
-        )}
-      </div>
-      {/* Right icons */}
-      <div className="flex items-center space-x-6">
-        {/* Current Date Display - Desktop */}
-        <div
-          className="hidden md:flex items-center text-sm font-medium"
-          style={{ color: theme.icon }}
-        >
-          <svg
-            className="mr-2"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke={theme.icon}
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-            <line x1="16" y1="2" x2="16" y2="6"></line>
-            <line x1="8" y1="2" x2="8" y2="6"></line>
-            <line x1="3" y1="10" x2="21" y2="10"></line>
-          </svg>
-          {formattedDate}
+    <nav className={`w-full px-6 py-4 ${
+      darkMode 
+        ? 'bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-gray-700' 
+        : 'bg-gradient-to-r from-white via-gray-50 to-white border-gray-200'
+    } border-b shadow-lg backdrop-blur-lg transition-all duration-300`}>
+      
+      <div className="flex items-center justify-between">
+        
+        {/* Left Section - Search Bar */}
+        <div className="flex items-center">
+          {/* Search Bar */}
+          <div className="flex relative">
+            <div className={`relative transition-all duration-300 ${
+              searchFocused ? 'w-80' : 'w-64'
+            }`}>
+              <Search 
+                size={18} 
+                className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${
+                  darkMode ? 'text-gray-400' : 'text-gray-500'
+                } transition-colors`} 
+              />
+              <input
+                type="text"
+                placeholder="Search pets, orders, users..."
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setSearchFocused(false)}
+                className={`w-full pl-10 pr-4 py-2 rounded-xl border transition-all duration-300 ${
+                  darkMode 
+                    ? 'bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:bg-gray-700' 
+                    : 'bg-gray-100 border-gray-200 text-gray-900 placeholder-gray-500 focus:bg-white'
+                } focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm`}
+              />
+            </div>
+          </div>
         </div>
 
-        {/* Current Date Display - Mobile */}
-        <div
-          className="flex md:hidden items-center text-sm font-medium"
-          style={{ color: theme.icon }}
-        >
-          <svg
-            className="mr-1"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke={theme.icon}
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-            <line x1="16" y1="2" x2="16" y2="6"></line>
-            <line x1="8" y1="2" x2="8" y2="6"></line>
-            <line x1="3" y1="10" x2="21" y2="10"></line>
-          </svg>
-          {shortFormattedDate}
+        {/* Center Section - Date & Time */}
+        <div className="hidden md:flex items-center space-x-4">
+          <div className={`px-4 py-2 rounded-lg ${
+            darkMode ? 'bg-gray-800' : 'bg-gray-100'
+          } transition-colors`}>
+            <div className="flex items-center space-x-2">
+              <Calendar size={18} className={darkMode ? 'text-gray-300' : 'text-gray-600'} />
+              <div className="text-center">
+                <p className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                  {formattedTime}
+                </p>
+                <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  {formattedDate.split(',')[0]}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Notification bell */}
-        <div className="relative" ref={notificationRef}>
+        {/* Right Section - Actions & Profile */}
+        <div className="flex items-center space-x-4">
+          
+          {/* Theme Toggle */}
           <button
-            className="focus:outline-none relative"
-            onClick={() => setNotificationOpen(!notificationOpen)}
-            aria-haspopup="true"
-            aria-expanded={notificationOpen}
+            onClick={toggleTheme}
+            className={`p-2 rounded-xl transition-all duration-200 ${
+              darkMode 
+                ? 'bg-gray-800 text-yellow-400 hover:bg-gray-700' 
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            } hover:scale-110`}
+            title="Toggle theme"
           >
-            <svg width="28" height="28" fill="none" viewBox="0 0 24 24">
-              <path
-                d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"
-                stroke={theme.icon}
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M13.73 21a2 2 0 01-3.46 0"
-                stroke={theme.icon}
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            {unreadCount > 0 && (
-              <span
-                className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 text-xs font-bold text-white rounded-full"
-                style={{ background: "#ef4444" }}
-              >
-                {unreadCount}
-              </span>
-            )}
+            {darkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
 
-          {/* Notification dropdown */}
-          {notificationOpen && (
-            <div
-              className="absolute right-0 mt-2 w-80 rounded-lg shadow-lg z-50 bg-white ring-1 ring-black ring-opacity-5 overflow-hidden"
-              style={{
-                background: darkMode ? "#18181b" : "#fff",
-                color: darkMode ? "#fff" : "#333",
-                border: `1px solid ${theme.border}`,
-                boxShadow: theme.shadow,
-                animation: "fadeIn 0.2s ease-out forwards",
-                transform: "translateY(0)",
-                opacity: 1,
-              }}
+          {/* Notifications */}
+          <div className="relative" ref={notificationRef}>
+            <button
+              onClick={() => setNotificationOpen(!notificationOpen)}
+              className={`relative p-2 rounded-xl transition-all duration-200 ${
+                darkMode 
+                  ? 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white' 
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900'
+              } hover:scale-110`}
+              title="Notifications"
             >
-              <div className="py-2">
-                <div
-                  className="px-4 py-2 border-b flex justify-between items-center"
-                  style={{ borderColor: theme.border }}
-                >
-                  <h3 className="text-sm font-semibold">Notifications</h3>
-                  <button
-                    className="text-xs text-violet-600 dark:text-violet-400 hover:underline"
-                    onClick={() => {
-                      // Handle mark all as read functionality here
-                      console.log("Mark all as read");
-                    }}
-                  >
-                    Mark all as read
-                  </button>
+              <Bell size={20} />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center animate-bounce">
+                  {unreadCount}
+                </span>
+              )}
+            </button>
+
+            {/* Notifications Dropdown */}
+            {notificationOpen && (
+              <div className={`absolute right-0 mt-3 w-96 rounded-xl shadow-2xl z-50 ${
+                darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+              } border backdrop-blur-lg transform transition-all duration-200 scale-100 opacity-100`}>
+                
+                {/* Header */}
+                <div className={`px-6 py-4 border-b ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                  <div className="flex items-center justify-between">
+                    <h3 className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      Notifications
+                    </h3>
+                    <button 
+                      className="text-purple-600 hover:text-purple-700 text-sm font-medium"
+                      onClick={() => console.log('Mark all read')}
+                    >
+                      Mark all read
+                    </button>
+                  </div>
                 </div>
 
+                {/* Notifications List */}
                 <div className="max-h-80 overflow-y-auto">
-                  {notifications.length > 0 ? (
-                    <div>
-                      {notifications.map((notification) => (
-                        <div
-                          key={notification.id}
-                          className="px-4 py-3 border-b hover:bg-gray-50 dark:hover:bg-gray-800 flex items-start transition cursor-pointer"
-                          style={{
-                            borderColor: theme.border,
-                            background: notification.read
-                              ? "transparent"
-                              : darkMode
-                              ? "rgba(124, 58, 237, 0.1)"
-                              : "rgba(124, 58, 237, 0.05)",
-                          }}
-                          onClick={() => {
-                            // Handle notification click
-                            console.log(
-                              `Clicked notification ${notification.id}`
-                            );
-                          }}
-                        >
-                          {/* Notification icon based on type */}
-                          <div className="mr-3 mt-1">
-                            {notification.type === "message" && (
-                              <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                                <svg
-                                  width="16"
-                                  height="16"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke={darkMode ? "#93c5fd" : "#3b82f6"}
-                                  strokeWidth="2"
-                                >
-                                  <path
-                                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  />
-                                </svg>
-                              </div>
-                            )}
-                            {notification.type === "order" && (
-                              <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
-                                <svg
-                                  width="16"
-                                  height="16"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke={darkMode ? "#86efac" : "#22c55e"}
-                                  strokeWidth="2"
-                                >
-                                  <path
-                                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  />
-                                </svg>
-                              </div>
-                            )}
-                            {notification.type === "alert" && (
-                              <div className="w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-900 flex items-center justify-center">
-                                <svg
-                                  width="16"
-                                  height="16"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke={darkMode ? "#fcd34d" : "#f59e0b"}
-                                  strokeWidth="2"
-                                >
-                                  <path
-                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  />
-                                </svg>
-                              </div>
-                            )}
-                            {notification.type === "system" && (
-                              <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                                <svg
-                                  width="16"
-                                  height="16"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke={darkMode ? "#d1d5db" : "#6b7280"}
-                                  strokeWidth="2"
-                                >
-                                  <path
-                                    d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  />
-                                </svg>
-                              </div>
-                            )}
+                  {notifications.map((notification) => {
+                    const IconComponent = notification.icon;
+                    return (
+                      <div
+                        key={notification.id}
+                        className={`px-6 py-4 border-b transition-colors cursor-pointer ${
+                          darkMode ? 'border-gray-700 hover:bg-gray-700' : 'border-gray-100 hover:bg-gray-50'
+                        } ${!notification.read ? (darkMode ? 'bg-gray-750' : 'bg-purple-50') : ''}`}
+                        onClick={() => console.log('Notification clicked', notification.id)}
+                      >
+                        <div className="flex items-start space-x-3">
+                          <div className={`p-2 rounded-lg ${getNotificationColor(notification.color)}`}>
+                            <IconComponent size={16} />
                           </div>
-
-                          {/* Notification content */}
-                          <div className="flex-1">
-                            <p className="text-sm">{notification.content}</p>
-                            <span className="text-xs text-gray-500 dark:text-gray-400">
+                          <div className="flex-1 min-w-0">
+                            <p className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                              {notification.title}
+                            </p>
+                            <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'} line-clamp-2`}>
+                              {notification.content}
+                            </p>
+                            <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} mt-1`}>
                               {notification.time}
-                            </span>
+                            </p>
                           </div>
-
-                          {/* Unread indicator */}
                           {!notification.read && (
-                            <div className="w-2 h-2 bg-violet-500 rounded-full"></div>
+                            <div className="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
                           )}
                         </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="py-6 text-center text-gray-500 dark:text-gray-400">
-                      <p>No notifications</p>
-                    </div>
-                  )}
+                      </div>
+                    );
+                  })}
                 </div>
 
-                <div
-                  className="px-4 py-2 border-t text-center"
-                  style={{ borderColor: theme.border }}
-                >
-                  <button
-                    className="text-sm text-violet-600 dark:text-violet-400 hover:underline"
-                    onClick={() => {
-                      // Handle view all functionality here
-                      console.log("View all notifications");
-                    }}
+                {/* Footer */}
+                <div className={`px-6 py-3 border-t ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                  <button 
+                    className="w-full text-center text-purple-600 hover:text-purple-700 text-sm font-medium py-2"
+                    onClick={() => console.log('View all notifications')}
                   >
                     View all notifications
                   </button>
                 </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
 
-        {/* Modern Profile Avatar Button */}
-        <div className="relative" ref={dropdownRef}>
-          <button
-            className="focus:outline-none group transition"
-            style={{
-              border: `2px solid ${theme.border}`,
-              borderRadius: "50%",
-              padding: 0,
-              background: "transparent",
-              width: 44,
-              height: 44,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: theme.shadow,
-              transition: "box-shadow 0.2s",
-            }}
-            onClick={() => setDropdownOpen((open) => !open)}
-            aria-haspopup="true"
-            aria-expanded={dropdownOpen}
-          >
-            <span
-              className="flex items-center justify-center text-lg font-bold group-hover:bg-violet-200 group-hover:text-violet-700 transition"
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: "50%",
-                background: darkMode ? "#fff" : "#ede9fe",
-                color: theme.icon,
-                transition: "background 0.2s, color 0.2s",
-              }}
+          {/* User Profile */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className={`flex items-center space-x-3 px-3 py-2 rounded-xl transition-all duration-200 ${
+                darkMode 
+                  ? 'bg-gray-800 text-white hover:bg-gray-700' 
+                  : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+              } hover:scale-105 group`}
             >
-              P
-            </span>
-          </button>
-          {dropdownOpen && (
-            <div
-              className="absolute right-0 mt-2 w-44 rounded-lg shadow-lg z-50 bg-white ring-1 ring-black ring-opacity-5"
-              style={{
-                background: darkMode ? "#18181b" : "#fff",
-                color: darkMode ? "#fff" : "#333",
-                border: `1px solid ${theme.border}`,
-                boxShadow: theme.shadow,
-                animation: "fadeIn 0.2s ease-out forwards",
-                transform: "translateY(0)",
-                opacity: 1,
-              }}
-            >
-              <div className="py-2">
-                <button
-                  className="w-full text-left px-4 py-2 hover:bg-violet-100 hover:text-violet-700 transition rounded-t-lg"
-                  style={{
-                    background: "none",
-                    border: "none",
-                    outline: "none",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => {
-                    setDropdownOpen(false);
-                    // Navigate to the appropriate profile page based on user role
-                    if (admin) {
-                      navigate("/admin/profile");
-                    } else if (seller) {
-                      navigate("/seller/profile");
-                    } else if (buyer) {
-                      navigate("/buyer/profile");
-                    } else if (petshop) {
-                      navigate("/petshop/profile");
-                    }
-                  }}
-                >
-                  My Profile
-                </button>
-                <button
-                  className="w-full text-left px-4 py-2 hover:bg-violet-100 hover:text-violet-700 transition rounded-b-lg"
-                  style={{
-                    background: "none",
-                    border: "none",
-                    outline: "none",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => {
-                    setDropdownOpen(false);
-                    // Call the logout function to clear user state
-                    logout();
-                    // Navigate to the landing page on logout
-                    // Small timeout to ensure state is cleared before navigation
-                    setTimeout(() => {
-                      navigate("/");
-                    }, 100);
-                  }}
-                >
-                  Logout
-                </button>
+              <div className={`w-10 h-10 ${userInfo.roleColor} rounded-full flex items-center justify-center text-white font-bold shadow-lg`}>
+                {userInfo.initials}
               </div>
-            </div>
-          )}
+              <div className="hidden lg:block text-left">
+                <p className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                  {userInfo.name}
+                </p>
+                <p className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  Online
+                </p>
+              </div>
+              <ChevronDown size={16} className={`transition-transform duration-200 ${
+                dropdownOpen ? 'rotate-180' : ''
+              }`} />
+            </button>
+
+            {/* Profile Dropdown */}
+            {dropdownOpen && (
+              <div className={`absolute right-0 mt-3 w-64 rounded-xl shadow-2xl z-50 ${
+                darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+              } border backdrop-blur-lg transform transition-all duration-200 scale-100 opacity-100`}>
+                
+                {/* User Info */}
+                <div className={`px-4 py-4 border-b ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-12 h-12 ${userInfo.roleColor} rounded-full flex items-center justify-center text-white font-bold`}>
+                      {userInfo.initials}
+                    </div>
+                    <div>
+                      <p className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                        {userInfo.name}
+                      </p>
+                      <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                        {userInfo.role}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Menu Items */}
+                <div className="py-2">
+                  <button
+                    onClick={() => {
+                      setDropdownOpen(false);
+                      navigate(`/${admin ? 'admin' : seller ? 'seller' : buyer ? 'buyer' : 'petshop'}/profile`);
+                    }}
+                    className={`w-full flex items-center px-4 py-3 text-left transition-colors ${
+                      darkMode ? 'text-gray-300 hover:bg-gray-700 hover:text-white' : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                  >
+                    <User size={18} className="mr-3" />
+                    My Profile
+                  </button>
+                  
+                  <button
+                    onClick={() => {
+                      setDropdownOpen(false);
+                      navigate(`/${admin ? 'admin' : seller ? 'seller' : buyer ? 'buyer' : 'petshop'}/settings`);
+                    }}
+                    className={`w-full flex items-center px-4 py-3 text-left transition-colors ${
+                      darkMode ? 'text-gray-300 hover:bg-gray-700 hover:text-white' : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                  >
+                    <Settings size={18} className="mr-3" />
+                    Settings
+                  </button>
+
+                  <hr className={`my-2 ${darkMode ? 'border-gray-700' : 'border-gray-200'}`} />
+                  
+                  <button
+                    onClick={() => {
+                      setDropdownOpen(false);
+                      logout();
+                      setTimeout(() => navigate("/"), 100);
+                    }}
+                    className="w-full flex items-center px-4 py-3 text-left transition-colors text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                  >
+                    <LogOut size={18} className="mr-3" />
+                    Logout
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </nav>
