@@ -1,37 +1,18 @@
 import { Link, useLocation } from "react-router-dom";
-import React, { useState } from "react";
+import React from "react";
 import { useUser } from "../../context/useUser";
-import { 
-  Home, 
-  Package, 
-  Settings, 
-  Users, 
-  UserCheck, 
-  Grid3X3, 
-  DollarSign, 
-  Tag, 
-  BarChart3,
-  LogOut,
-  ChevronLeft,
-  ChevronRight,
-  Search
-} from "lucide-react";
+import { Home, Package, Settings, Users, UserCheck } from "lucide-react";
 import { useTheme } from "../../context/useTheme";
 
+// Custom Accent Green
+const ACCENT_COLOR = "#104137";
+
 // For your project logo, adjust the src path to match your assets location.
+// Example: "/assets/logo.png"
 const LOGO_SRC = "/assets/logo2.png";
 
 const sidebarLinks = {
-  ADMIN: [
-    { name: "Dashboard", path: "/admin/dashboard", icon: Home },
-    { name: "Users", path: "/admin/users", icon: Users },
-    { name: "Orders", path: "/admin/orders", icon: Package },
-    { name: "Categories", path: "/admin/categories", icon: Grid3X3 },
-    { name: "Revenue", path: "/admin/revenue", icon: DollarSign },
-    { name: "Offers", path: "/admin/offers", icon: Tag },
-    { name: "Reports", path: "/admin/reports", icon: BarChart3 },
-    { name: "Settings", path: "/admin/settings", icon: Settings }
-  ],
+  ADMIN: [{ name: "Dashboard", path: "/admin/dashboard", icon: Home }],
   PET_SHOP: [{ name: "Dashboard", path: "/petshop/dashboard", icon: Home }],
   SELLER: [
     { name: "Dashboard", path: "/seller/dashboard", icon: Home },
@@ -42,12 +23,9 @@ const sidebarLinks = {
     { name: "Articles", path: "/seller/articles", icon: Settings }
   ],
   BUYER: [
-    { name: "Dashboard", path: "/buyer/dashboard", icon: Home },
-    { name: "Pets", path: "/buyer/pets", icon: Package },
-    { name: "Orders", path: "/buyer/orders", icon: Users },
-    { name: "Payments", path: "/buyer/payment", icon: UserCheck },
-    { name: "Articles", path: "/buyer/articles", icon: Settings }
+    { name: "Dashboard", path: "/buyer/dashboard", icon: Home }
   ],
+
 };
 
 function Sidebar({
@@ -59,175 +37,181 @@ function Sidebar({
   const { user } = useUser();
   const location = useLocation();
   const { darkMode, toggleTheme } = useTheme();
-  const [isCollapsed, setIsCollapsed] = useState(false);
-
   let linksToShow = [];
   let headerLabel = "";
-  let userRole = "";
-  
   if (admin) {
     linksToShow = sidebarLinks.ADMIN;
-    headerLabel = "Admin Panel";
-    userRole = "System Administrator";
+    headerLabel = "Admin: Theekshan";
   } else if (petshop) {
     linksToShow = sidebarLinks.PET_SHOP;
-    headerLabel = "Pet Shop";
-    userRole = "Shop Manager";
+    headerLabel = "Petshop: Dasun";
   } else if (seller) {
     linksToShow = sidebarLinks.SELLER;
-    headerLabel = "Seller Panel";
-    userRole = "Pet Seller";
+    headerLabel = "Seller: Ramesh";
   } else if (buyer) {
     linksToShow = sidebarLinks.BUYER;
-    headerLabel = "Buyer Panel";
-    userRole = "Pet Buyer";
+    headerLabel = "Buyer: Bimsara";
   } else if (user?.role) {
     linksToShow = sidebarLinks[user.role];
-    headerLabel = user.role === "ADMIN" ? "Admin Panel" : 
-                  user.role === "PET_SHOP" ? "Pet Shop" :
-                  user.role === "SELLER" ? "Seller Panel" : "Buyer Panel";
-    userRole = user.role === "ADMIN" ? "System Administrator" :
-               user.role === "PET_SHOP" ? "Shop Manager" :
-               user.role === "SELLER" ? "Pet Seller" : "Pet Buyer";
+    headerLabel =
+      user.role === "ADMIN"
+        ? "Admin: Theekshan"
+        : user.role === "PET_SHOP"
+        ? "Petshop: Dasun"
+        : user.role === "SELLER"
+        ? "Seller: Ramesh"
+        : user.role === "BUYER"
+        ? "Buyer: Bimsara"
+        : "";
   }
 
-  return (
-    <div className={`${isCollapsed ? 'w-20' : 'w-72'} transition-all duration-300 ease-in-out h-screen bg-gradient-to-b ${
-      darkMode 
-        ? 'from-gray-900 via-gray-800 to-gray-900' 
-        : 'from-white via-gray-50 to-white'
-    } shadow-2xl border-r ${
-      darkMode ? 'border-gray-700' : 'border-gray-200'
-    } flex flex-col relative overflow-visible`}>
-      
-      {/* Collapse Toggle Button */}
-      <button
-        onClick={() => setIsCollapsed(!isCollapsed)}
-        className={`absolute top-20 ${isCollapsed ? 'right-2' : 'right-4'} w-8 h-8 rounded-full bg-purple-600 text-white shadow-xl border-2 border-white flex items-center justify-center hover:bg-purple-700 hover:scale-110 transition-all duration-300 z-10 group`}
-        title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-      >
-        {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
-      </button>
+  // Color palette for light/dark mode
+  const light = {
+    bg: "#fff",
+    text: "#5b21b6",
+    border: "#a78bfa",
+    active: "#7c3aed",
+    icon: "#7c3aed",
+    shadow: "0 2px 8px 0 rgba(124,58,237,0.15)",
+    logoutBg: "#fff",
+    logoutText: "#7c3aed",
+  };
+  const dark = {
+    bg: "#7c3aed",
+    text: "#fff",
+    border: "#a78bfa",
+    active: "#5b21b6",
+    icon: "#fff",
+    shadow: "0 2px 8px 0 rgba(0,0,0,0.15)",
+    logoutBg: "#7c3aed",
+    logoutText: "#fff",
+  };
+  const theme = darkMode ? dark : light;
 
-      {/* Header Section */}
-      <div className={`flex-shrink-0 ${isCollapsed ? 'px-4' : 'px-6'} py-6`}>
-        <div className="flex items-center justify-between mb-6">
+  return (
+    <div
+      className="w-64 h-screen flex flex-col justify-between"
+      style={{
+        background: theme.bg,
+        color: theme.text,
+        transition: "background 0.3s, color 0.3s",
+      }}
+    >
+      <div>
+        {/* Header */}
+        <div
+          className="p-6 border-b flex items-center justify-between"
+          style={{ borderColor: theme.border }}
+        >
           <div className="flex items-center space-x-3">
-            <div className="relative">
-              <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-                <img
-                  src={LOGO_SRC}
-                  alt="PetKart"
-                  className="w-8 h-8 object-contain"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'block';
-                  }}
-                />
-                <span className={`font-bold text-white text-lg ${isCollapsed ? 'block' : 'hidden'}`}>P</span>
-              </div>
-              <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+            <div
+              className="bg-white rounded-lg flex items-center justify-center w-12 h-12 shadow"
+              style={{ boxShadow: theme.shadow }}
+            >
+              <img
+                src={LOGO_SRC}
+                alt=""
+                className="w-9 h-9 object-contain"
+              />
             </div>
-          {!isCollapsed && (
             <div>
-              <h3 className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} tracking-wide`}>
+              <h3 className="text-xl font-bold" style={{ color: theme.text }}>
                 PETKART
               </h3>
-              <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'} font-medium`}>
+              <p
+                className="text-sm"
+                style={{ color: theme.text, opacity: 0.7 }}
+              >
                 {headerLabel}
               </p>
             </div>
-          )}
-        </div>
-      </div>        {/* Search Bar */}
-        {!isCollapsed && (
-          <div className="relative mb-6">
-            <Search size={18} className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${
-              darkMode ? 'text-gray-400' : 'text-gray-500'
-            }`} />
-            <input
-              type="text"
-              placeholder="Search menu..."
-              className={`w-full pl-10 pr-4 py-2 rounded-lg border ${
-                darkMode 
-                  ? 'bg-gray-800 border-gray-600 text-white placeholder-gray-400' 
-                  : 'bg-gray-100 border-gray-200 text-gray-900 placeholder-gray-500'
-              } focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all`}
-            />
           </div>
-        )}
-      </div>
+          {/* Dark/Light mode toggle */}
+          <button
+            aria-label="Toggle dark mode"
+            className="ml-2 p-2 rounded-full border"
+            style={{
+              borderColor: theme.border,
+              color: theme.text,
+              background: "transparent",
+            }}
+            onClick={toggleTheme}
+          >
+            {darkMode ? (
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+                <path
+                  d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"
+                  stroke={theme.text}
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            ) : (
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="5"
+                  stroke={theme.text}
+                  strokeWidth="2"
+                />
+                <path
+                  d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+                  stroke={theme.text}
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            )}
+          </button>
+        </div>
 
-      {/* Navigation Menu */}
-      <nav className={`flex-1 ${isCollapsed ? 'px-2' : 'px-6'} py-2`}>
-        <div className="space-y-2">
-          {linksToShow?.map((link, index) => {
+        {/* Menu Items */}
+        <nav className="mt-6 px-4">
+          {linksToShow?.map((link) => {
             const Icon = link.icon;
             const isActive = location.pathname === link.path;
-            
             return (
               <Link
                 key={link.name}
                 to={link.path}
-                className={`group relative flex items-center ${
-                  isCollapsed ? 'justify-center px-3' : 'px-4'
-                } py-3 rounded-xl font-medium transition-all duration-200 ${
-                  isActive
-                    ? `${
-                        darkMode 
-                          ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg' 
-                          : 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg'
-                      }`
-                    : `${
-                        darkMode 
-                          ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
-                          : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                      }`
-                } transform hover:scale-105 hover:translate-x-1`}
-                title={isCollapsed ? link.name : ''}
+                className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg mb-4 font-medium transition-all duration-200"
+                style={{
+                  background: isActive ? theme.active : theme.bg,
+                  color: isActive
+                    ? darkMode
+                      ? dark.text
+                      : light.bg
+                    : theme.text,
+                  border: `2px solid ${theme.border}`,
+                  boxShadow: isActive
+                    ? theme.shadow
+                    : "0 1px 4px 0 rgba(124,58,237,0.08)",
+                  fontWeight: 500,
+                }}
               >
-                {/* Active indicator */}
-                {isActive && (
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-white rounded-r-full"></div>
-                )}
-                
-                <Icon 
-                  size={20} 
-                  className={`${isCollapsed ? '' : 'mr-3'} transition-colors ${
-                    isActive ? 'text-white' : ''
-                  }`} 
-                />
-                
-                {!isCollapsed && (
-                  <span className="flex-1">{link.name}</span>
-                )}
-
-                {/* Tooltip for collapsed state */}
-                {isCollapsed && (
-                  <div className="absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
-                    {link.name}
-                  </div>
-                )}
+                <Icon className="w-5 h-5" style={{ color: theme.icon }} />
+                <span>{link.name}</span>
               </Link>
             );
           })}
-        </div>
-      </nav>
-
-      {/* User Profile & Logout */}
-      <div className={`flex-shrink-0 ${isCollapsed ? 'px-2' : 'px-6'} pb-6`}>
+        </nav>
+      </div>
+      {/* Logout Button */}
+      <div className="p-6">
         <button
-          className={`w-full flex items-center ${
-            isCollapsed ? 'justify-center px-3' : 'px-4'
-          } py-3 rounded-xl font-medium transition-all duration-200 ${
-            darkMode 
-              ? 'text-red-400 hover:bg-red-900/20 hover:text-red-300' 
-              : 'text-red-600 hover:bg-red-50 hover:text-red-700'
-          } transform hover:scale-105`}
-          title={isCollapsed ? 'Logout' : ''}
+          className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg font-medium border transition-all duration-200"
+          style={{
+            background: theme.logoutBg,
+            color: theme.logoutText,
+            border: `2px solid ${theme.border}`,
+            boxShadow: "0 1px 4px 0 rgba(124,58,237,0.08)",
+            fontWeight: 500,
+          }}
         >
-          <LogOut size={20} className={isCollapsed ? '' : 'mr-3'} />
-          {!isCollapsed && <span>Logout</span>}
+          <Home className="w-5 h-5 mr-2" style={{ color: theme.logoutText }} />
+          <span>Logout</span>
         </button>
       </div>
     </div>
