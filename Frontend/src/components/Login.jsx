@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { login, signup } from "../api/auth";
 
 const Navbar = ({ showSignupModal = false, setShowSignupModal = () => {} }) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -16,16 +17,19 @@ const Navbar = ({ showSignupModal = false, setShowSignupModal = () => {} }) => {
     address: "",
     city: "",
     postalCode: "",
-    petInterest: "",
-    experience: "",
-    budgetRange: "",
-    housingType: "",
-    hasYard: false,
-    otherPets: "",
-    message: "",
-    newsletter: true,
-    updates: true,
+    isSeller: false,
+    isBuyer: false,
+    isPetShop: false,
+    isBoth: false,
+    shopName: "",
+    shopLicense: "",
+    shopDescription: "",
+    yearsInBusiness: "",
+    specialties: "",
+    password: "",
   });
+  const [loginError, setLoginError] = useState("");
+  const [signupError, setSignupError] = useState("");
 
   const openLoginModal = () => setShowLoginModal(true);
   const closeLoginModal = () => setShowLoginModal(false);
@@ -41,23 +45,35 @@ const Navbar = ({ showSignupModal = false, setShowSignupModal = () => {} }) => {
       address: "",
       city: "",
       postalCode: "",
-      petInterest: "",
-      experience: "",
-      budgetRange: "",
-      housingType: "",
-      hasYard: false,
-      otherPets: "",
-      message: "",
-      newsletter: true,
-      updates: true,
+      // User Role Options
+      isSeller: false,
+      isBuyer: false,
+      isPetShop: false,
+      isBoth: false,
+      // Pet Shop Details
+      shopName: "",
+      shopLicense: "",
+      shopDescription: "",
+      yearsInBusiness: "",
+      specialties: "",
     });
   };
 
-  const handleGetStartedSubmit = (e) => {
+  const handleGetStartedSubmit = async (e) => {
     e.preventDefault();
-    console.log("Get Started form submitted:", getStartedForm);
-    alert("Thank you for your interest! We will contact you soon.");
-    closeGetStartedModal();
+    setSignupError("");
+    try {
+      const res = await signup(getStartedForm);
+      if (res.id) {
+        alert("Signup successful! Please login.");
+        closeGetStartedModal();
+        setShowLoginModal(true);
+      } else {
+        setSignupError(res);
+      }
+    } catch (err) {
+      setSignupError("Signup failed. Please try again.");
+    }
   };
 
   const handleGetStartedInputChange = (e) => {
@@ -76,11 +92,20 @@ const Navbar = ({ showSignupModal = false, setShowSignupModal = () => {} }) => {
     }));
   };
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log("Login form submitted:", loginForm);
-    closeLoginModal();
+    setLoginError("");
+    try {
+      const res = await login(loginForm);
+      if (res.id) {
+        // TODO: Set user context or redirect
+        closeLoginModal();
+      } else {
+        setLoginError(res);
+      }
+    } catch (err) {
+      setLoginError("Login failed. Please try again.");
+    }
   };
 
   return (
@@ -145,6 +170,14 @@ const Navbar = ({ showSignupModal = false, setShowSignupModal = () => {} }) => {
               </button>
             </div>
             <form className="login-form" onSubmit={handleLoginSubmit}>
+              {loginError && (
+                <div
+                  className="error-message"
+                  style={{ color: "red", marginBottom: "8px" }}
+                >
+                  {loginError}
+                </div>
+              )}
               <div className="form-group">
                 <label htmlFor="email">📧 Email Address *</label>
                 <input
@@ -234,6 +267,14 @@ const Navbar = ({ showSignupModal = false, setShowSignupModal = () => {} }) => {
               className="get-started-form"
               onSubmit={handleGetStartedSubmit}
             >
+              {signupError && (
+                <div
+                  className="error-message"
+                  style={{ color: "red", marginBottom: "8px" }}
+                >
+                  {signupError}
+                </div>
+              )}
               {/* Personal Information Section */}
               <div className="form-section">
                 <h3 className="section-title">👤 Personal Information</h3>
@@ -304,216 +345,237 @@ const Navbar = ({ showSignupModal = false, setShowSignupModal = () => {} }) => {
                     autoComplete="bday"
                   />
                 </div>
-              </div>
-
-              {/* Address Information Section */}
-              <div className="form-section">
-                <h3 className="section-title">🏠 Address Information</h3>
                 <div className="form-group">
-                  <label htmlFor="address">Street Address</label>
+                  <label htmlFor="signupPassword">🔒 Password *</label>
                   <input
-                    type="text"
-                    id="address"
-                    name="address"
-                    value={getStartedForm.address}
+                    type="password"
+                    id="signupPassword"
+                    name="password"
+                    value={getStartedForm.password}
                     onChange={handleGetStartedInputChange}
-                    placeholder="Enter your street address"
-                    autoComplete="street-address"
+                    required
+                    placeholder="Create a password"
+                    autoComplete="new-password"
+                    minLength="6"
                   />
                 </div>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="city">City *</label>
-                    <input
-                      type="text"
-                      id="city"
-                      name="city"
-                      value={getStartedForm.city}
-                      onChange={handleGetStartedInputChange}
-                      required
-                      placeholder="Enter your city"
-                      autoComplete="address-level2"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="postalCode">Postal Code</label>
-                    <input
-                      type="text"
-                      id="postalCode"
-                      name="postalCode"
-                      value={getStartedForm.postalCode}
-                      onChange={handleGetStartedInputChange}
-                      placeholder="Enter postal code"
-                      autoComplete="postal-code"
-                    />
-                  </div>
-                </div>
               </div>
 
-              {/* Pet Preferences Section */}
+              {/* User Role Section */}
               <div className="form-section">
-                <h3 className="section-title">🐾 Pet Preferences</h3>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="petInterest">🐕 Pet Interest *</label>
-                    <select
-                      id="petInterest"
-                      name="petInterest"
-                      value={getStartedForm.petInterest}
-                      onChange={handleGetStartedInputChange}
-                      required
-                    >
-                      <option value="">Select pet type</option>
-                      <option value="dogs">🐕 Dogs</option>
-                      <option value="cats">🐱 Cats</option>
-                      <option value="fish">🐠 Fish</option>
-                      <option value="birds">🦜 Birds</option>
-                      <option value="rabbits">🐰 Rabbits</option>
-                      <option value="hamsters">🐹 Hamsters</option>
-                      <option value="reptiles">🦎 Reptiles</option>
-                      <option value="other">🔍 Other</option>
-                    </select>
+                <h3 className="section-title">👥 User Role</h3>
+                <p className="role-instruction">
+                  Please select your role in PetKart (select at least one):
+                </p>
+                <div className="user-roles-container">
+                  <div className="form-group checkbox-group">
+                    <label className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        name="isBuyer"
+                        checked={getStartedForm.isBuyer}
+                        onChange={(e) => {
+                          handleGetStartedInputChange(e);
+                          // If Both is selected, update isSeller accordingly
+                          if (getStartedForm.isBoth && !e.target.checked) {
+                            setGetStartedForm((prev) => ({
+                              ...prev,
+                              isBoth: false,
+                            }));
+                          }
+                        }}
+                      />
+                      <span className="checkmark"></span>
+                      🛒 Buyer (I want to purchase pets)
+                    </label>
                   </div>
-                  <div className="form-group">
-                    <label htmlFor="experience">📚 Pet Care Experience</label>
-                    <select
-                      id="experience"
-                      name="experience"
-                      value={getStartedForm.experience}
-                      onChange={handleGetStartedInputChange}
-                    >
-                      <option value="">Select your experience level</option>
-                      <option value="first-time">
-                        🌟 First-time pet owner
-                      </option>
-                      <option value="some-experience">
-                        ⭐ Some experience
-                      </option>
-                      <option value="experienced">⭐⭐ Very experienced</option>
-                      <option value="professional">
-                        ⭐⭐⭐ Professional/Breeder
-                      </option>
-                    </select>
-                  </div>
-                </div>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="budgetRange">💰 Budget Range</label>
-                    <select
-                      id="budgetRange"
-                      name="budgetRange"
-                      value={getStartedForm.budgetRange}
-                      onChange={handleGetStartedInputChange}
-                    >
-                      <option value="">Select budget range</option>
-                      <option value="under-10000">Under LKR 10,000</option>
-                      <option value="10000-25000">LKR 10,000 - 25,000</option>
-                      <option value="25000-50000">LKR 25,000 - 50,000</option>
-                      <option value="50000-100000">LKR 50,000 - 100,000</option>
-                      <option value="over-100000">Over LKR 100,000</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="housingType">🏡 Housing Type</label>
-                    <select
-                      id="housingType"
-                      name="housingType"
-                      value={getStartedForm.housingType}
-                      onChange={handleGetStartedInputChange}
-                    >
-                      <option value="">Select housing type</option>
-                      <option value="apartment">🏢 Apartment</option>
-                      <option value="house">🏠 House</option>
-                      <option value="condo">🏘️ Condominium</option>
-                      <option value="townhouse">🏘️ Townhouse</option>
-                      <option value="other">🔍 Other</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="otherPets">🐾 Current Pets</label>
-                  <input
-                    type="text"
-                    id="otherPets"
-                    name="otherPets"
-                    value={getStartedForm.otherPets}
-                    onChange={handleGetStartedInputChange}
-                    placeholder="Do you have other pets? (e.g., 2 cats, 1 dog)"
-                  />
-                </div>
-                <div className="form-group checkbox-group">
-                  <label className="checkbox-label">
-                    <input
-                      type="checkbox"
-                      name="hasYard"
-                      checked={getStartedForm.hasYard}
-                      onChange={handleGetStartedInputChange}
-                    />
-                    <span className="checkmark"></span>
-                    🌳 I have a yard or outdoor space for pets
-                  </label>
-                </div>
-              </div>
 
-              {/* Additional Information Section */}
-              <div className="form-section">
-                <h3 className="section-title">💬 Additional Information</h3>
-                <div className="form-group">
-                  <label htmlFor="message">
-                    📝 Tell us more about yourself
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={getStartedForm.message}
-                    onChange={handleGetStartedInputChange}
-                    rows="4"
-                    placeholder="Tell us about your ideal pet, lifestyle, specific requirements, or any questions you have..."
-                  ></textarea>
-                </div>
-              </div>
+                  <div className="form-group checkbox-group">
+                    <label className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        name="isSeller"
+                        checked={getStartedForm.isSeller}
+                        onChange={(e) => {
+                          handleGetStartedInputChange(e);
+                          // If Both is selected, update isBuyer accordingly
+                          if (getStartedForm.isBoth && !e.target.checked) {
+                            setGetStartedForm((prev) => ({
+                              ...prev,
+                              isBoth: false,
+                            }));
+                          }
+                        }}
+                      />
+                      <span className="checkmark"></span>
+                      💰 Seller (I want to sell pets)
+                    </label>
+                  </div>
 
-              {/* Communication Preferences Section */}
-              <div className="form-section">
-                <h3 className="section-title">📧 Communication Preferences</h3>
-                <div className="form-group checkbox-group">
-                  <label className="checkbox-label">
-                    <input
-                      type="checkbox"
-                      name="newsletter"
-                      checked={getStartedForm.newsletter}
-                      onChange={handleGetStartedInputChange}
-                    />
-                    <span className="checkmark"></span>
-                    📬 Subscribe to our newsletter for pet care tips
-                  </label>
-                </div>
-                <div className="form-group checkbox-group">
-                  <label className="checkbox-label">
-                    <input
-                      type="checkbox"
-                      name="updates"
-                      checked={getStartedForm.updates}
-                      onChange={handleGetStartedInputChange}
-                    />
-                    <span className="checkmark"></span>
-                    🔔 Receive updates about new pets and special offers
-                  </label>
-                </div>
-              </div>
+                  <div className="form-group checkbox-group">
+                    <label className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        name="isPetShop"
+                        checked={getStartedForm.isPetShop}
+                        onChange={handleGetStartedInputChange}
+                      />
+                      <span className="checkmark"></span>
+                      🏪 Pet Shop (I represent a pet shop)
+                    </label>
+                  </div>
 
-              {/* Terms Agreement */}
-              <div className="form-agreement">
-                <label className="checkbox-label">
-                  <input type="checkbox" required />
-                  <span className="checkmark"></span>✅ I agree to the{" "}
-                  <a href="#">Terms of Service</a> and{" "}
-                  <a href="#">Privacy Policy</a>
-                </label>
+                  <div className="form-group checkbox-group">
+                    <label className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        name="isBoth"
+                        checked={getStartedForm.isBoth}
+                        onChange={(e) => {
+                          handleGetStartedInputChange(e);
+                          // When Both is selected, automatically select Buyer and Seller
+                          if (e.target.checked) {
+                            setGetStartedForm((prev) => ({
+                              ...prev,
+                              isBuyer: true,
+                              isSeller: true,
+                            }));
+                          }
+                        }}
+                      />
+                      <span className="checkmark"></span>
+                      🔄 Both (I want to buy and sell pets)
+                    </label>
+                  </div>
+                </div>
+
+                {/* Conditional sections based on user role */}
+                <div className="role-conditional-sections">
+                  {/* Address Information - when Buyer, Seller, or Both */}
+                  {(getStartedForm.isBuyer ||
+                    getStartedForm.isSeller ||
+                    getStartedForm.isBoth) && (
+                    <div className="conditional-section">
+                      <h4 className="subsection-title">
+                        � Address Information
+                      </h4>
+                      <div className="form-group">
+                        <label htmlFor="address">Street Address</label>
+                        <input
+                          type="text"
+                          id="address"
+                          name="address"
+                          value={getStartedForm.address}
+                          onChange={handleGetStartedInputChange}
+                          placeholder="Enter your street address"
+                          autoComplete="street-address"
+                        />
+                      </div>
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label htmlFor="city">City *</label>
+                          <input
+                            type="text"
+                            id="city"
+                            name="city"
+                            value={getStartedForm.city}
+                            onChange={handleGetStartedInputChange}
+                            required
+                            placeholder="Enter your city"
+                            autoComplete="address-level2"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="postalCode">Postal Code</label>
+                          <input
+                            type="text"
+                            id="postalCode"
+                            name="postalCode"
+                            value={getStartedForm.postalCode}
+                            onChange={handleGetStartedInputChange}
+                            placeholder="Enter postal code"
+                            autoComplete="postal-code"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Pet Shop Details - when isPetShop is true */}
+                  {getStartedForm.isPetShop && (
+                    <div className="conditional-section pet-shop-details">
+                      <h4 className="subsection-title">🏪 Pet Shop Details</h4>
+                      <div className="form-group">
+                        <label htmlFor="shopName">Shop Name *</label>
+                        <input
+                          type="text"
+                          id="shopName"
+                          name="shopName"
+                          value={getStartedForm.shopName}
+                          onChange={handleGetStartedInputChange}
+                          required={getStartedForm.isPetShop}
+                          placeholder="Enter your shop name"
+                        />
+                      </div>
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label htmlFor="shopLicense">License Number *</label>
+                          <input
+                            type="text"
+                            id="shopLicense"
+                            name="shopLicense"
+                            value={getStartedForm.shopLicense}
+                            onChange={handleGetStartedInputChange}
+                            required={getStartedForm.isPetShop}
+                            placeholder="Enter your shop license number"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="yearsInBusiness">
+                            Years in Business
+                          </label>
+                          <input
+                            type="number"
+                            id="yearsInBusiness"
+                            name="yearsInBusiness"
+                            value={getStartedForm.yearsInBusiness}
+                            onChange={handleGetStartedInputChange}
+                            placeholder="How many years in business?"
+                            min="0"
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="specialties">Shop Specialties</label>
+                        <input
+                          type="text"
+                          id="specialties"
+                          name="specialties"
+                          value={getStartedForm.specialties}
+                          onChange={handleGetStartedInputChange}
+                          placeholder="What types of pets or services do you specialize in?"
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="shopDescription">
+                          Shop Description
+                        </label>
+                        <textarea
+                          id="shopDescription"
+                          name="shopDescription"
+                          value={getStartedForm.shopDescription}
+                          onChange={handleGetStartedInputChange}
+                          rows="3"
+                          placeholder="Tell us about your shop..."
+                        ></textarea>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <button type="submit" className="get-started-button">
-                🚀 Submit My Application
+                Signup
               </button>
 
               <p className="login-text">
@@ -971,6 +1033,69 @@ const Navbar = ({ showSignupModal = false, setShowSignupModal = () => {} }) => {
 
         .login-text a:hover {
           text-decoration: underline;
+        }
+
+        /* User Role Styles */
+        .role-instruction {
+          margin-bottom: 1rem;
+          font-size: 0.95rem;
+          color: var(--dark-gray);
+        }
+
+        .user-roles-container {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1rem;
+          margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 640px) {
+          .user-roles-container {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        .role-conditional-sections {
+          margin-top: 1.5rem;
+        }
+
+        .conditional-section {
+          margin-top: 1.5rem;
+          padding: 1.2rem;
+          border: 1px dashed rgba(106, 13, 173, 0.3);
+          border-radius: 8px;
+          background-color: rgba(106, 13, 173, 0.05);
+          animation: fadeIn 0.3s ease-in;
+        }
+
+        .conditional-section + .conditional-section {
+          margin-top: 1rem;
+        }
+
+        .pet-shop-details {
+          border-color: rgba(40, 167, 69, 0.4);
+          background-color: rgba(40, 167, 69, 0.05);
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .subsection-title {
+          font-size: 1rem;
+          font-weight: 600;
+          color: var(--primary-purple);
+          margin-bottom: 1rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
         }
       `}</style>
     </>
