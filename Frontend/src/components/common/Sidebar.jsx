@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import React from "react";
 import { useUser } from "../../context/useUser";
-import { Home, Package, Settings, Users, UserCheck } from "lucide-react";
+import { Home, Package, Settings, Users, UserCheck, Grid3X3, DollarSign } from "lucide-react";
 import { useTheme } from "../../context/useTheme";
 
 // Custom Accent Green
@@ -15,6 +15,9 @@ const sidebarLinks = {
   ADMIN: [
     { name: "Dashboard", path: "/admin/dashboard", icon: Home },
     { name: "Users", path: "/admin/users", icon: Users },
+    { name: "Orders", path: "/admin/orders", icon: Package },
+    { name: "Categories", path: "/admin/categories", icon: Grid3X3 },
+    { name: "Revenue", path: "/admin/revenue", icon: DollarSign },
     { name: "Settings", path: "/admin/settings", icon: Settings }
   ],
   PET_SHOP: [{ name: "Dashboard", path: "/petshop/dashboard", icon: Home }],
