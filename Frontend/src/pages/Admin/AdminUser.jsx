@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useTheme } from '../../context/useTheme';
+import { getThemeClasses, getCardClasses, getInputClasses } from '../../utils/themeUtils';
 import { 
   Users, 
   UserPlus, 
@@ -25,6 +27,8 @@ import {
 } from 'lucide-react';
 
 const AdminUser = () => {
+  const { darkMode } = useTheme();
+  const theme = getThemeClasses(darkMode);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterRole, setFilterRole] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -197,8 +201,8 @@ const AdminUser = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
-          <p className="text-gray-600">Manage all platform users, roles, and permissions</p>
+          <h1 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>User Management</h1>
+          <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Manage all platform users, roles, and permissions</p>
         </div>
         <div className="flex items-center space-x-3">
           <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center">
@@ -214,21 +218,21 @@ const AdminUser = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className={getCardClasses(darkMode)}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Total Users</p>
-              <p className="text-3xl font-bold text-gray-900">{userStats.total}</p>
+              <p className={`text-sm font-medium ${theme.secondaryText}`}>Total Users</p>
+              <p className={`text-3xl font-bold ${theme.primaryText}`}>{userStats.total}</p>
             </div>
             <div className="bg-blue-100 text-blue-600 p-3 rounded-full">
               <Users size={24} />
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className={getCardClasses(darkMode)}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Active Users</p>
+              <p className={`text-sm font-medium ${theme.secondaryText}`}>Active Users</p>
               <p className="text-3xl font-bold text-green-600">{userStats.active}</p>
             </div>
             <div className="bg-green-100 text-green-600 p-3 rounded-full">
