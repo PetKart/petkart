@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useTheme } from '../../context/useTheme';
 import { 
   Users, 
   Package, 
@@ -21,6 +22,7 @@ import {
 
 const AdminDashboard = () => {
   const [timeRange, setTimeRange] = useState('30days');
+  const { darkMode } = useTheme();
 
   // Add console log to check if component is rendering
   console.log('AdminDashboard component is rendering');
@@ -176,14 +178,18 @@ const AdminDashboard = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">System Administration</h1>
-          <p className="text-gray-600">Monitor and manage the entire PetKart platform</p>
+          <h1 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>System Administration</h1>
+          <p className={`${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Monitor and manage the entire PetKart platform</p>
         </div>
         <div className="flex items-center space-x-4">
           <select 
             value={timeRange} 
             onChange={(e) => setTimeRange(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className={`px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${
+              darkMode 
+                ? 'bg-gray-800 border-gray-600 text-white' 
+                : 'bg-white border-gray-300 text-gray-900'
+            }`}
           >
             <option value="7days">Last 7 days</option>
             <option value="30days">Last 30 days</option>
@@ -198,7 +204,9 @@ const AdminDashboard = () => {
         {systemStats.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <div key={index} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200">
+            <div key={index} className={`rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200 ${
+              darkMode ? 'bg-gray-800' : 'bg-white'
+            }`}>
               <div className="flex items-center justify-between mb-4">
                 <div className={`${stat.bgColor} ${stat.color} p-3 rounded-full`}>
                   <Icon size={20} />
@@ -208,9 +216,9 @@ const AdminDashboard = () => {
                 </span>
               </div>
               <div>
-                <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-                <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                <p className="text-xs text-gray-500 mt-1">{stat.subtext}</p>
+                <p className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{stat.value}</p>
+                <p className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>{stat.title}</p>
+                <p className={`text-xs mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{stat.subtext}</p>
               </div>
             </div>
           );
@@ -219,9 +227,11 @@ const AdminDashboard = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Order Management */}
-        <div className="lg:col-span-2 bg-white rounded-lg shadow-md p-6">
+        <div className={`lg:col-span-2 rounded-lg shadow-md p-6 ${
+          darkMode ? 'bg-gray-800' : 'bg-white'
+        }`}>
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-gray-900">Recent Orders Management</h2>
+            <h2 className={`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Recent Orders Management</h2>
             <div className="flex items-center space-x-2">
               <button className="text-purple-600 hover:text-purple-700 text-sm font-medium flex items-center">
                 <Filter size={16} className="mr-1" />
@@ -236,25 +246,29 @@ const AdminDashboard = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="text-left py-3 px-4 font-medium text-gray-700">Order ID</th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-700">Pet</th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-700">Buyer</th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-700">Seller</th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-700">Amount</th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-700">Commission</th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
-                  <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
+                <tr className={`border-b ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
+                  <th className={`text-left py-3 px-4 font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Order ID</th>
+                  <th className={`text-left py-3 px-4 font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Pet</th>
+                  <th className={`text-left py-3 px-4 font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Buyer</th>
+                  <th className={`text-left py-3 px-4 font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Seller</th>
+                  <th className={`text-left py-3 px-4 font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Amount</th>
+                  <th className={`text-left py-3 px-4 font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Commission</th>
+                  <th className={`text-left py-3 px-4 font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Status</th>
+                  <th className={`text-left py-3 px-4 font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {recentOrders.map((order) => (
-                  <tr key={order.id} className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="py-4 px-4 font-medium text-gray-900">{order.id}</td>
-                    <td className="py-4 px-4 text-gray-700">{order.petName}</td>
-                    <td className="py-4 px-4 text-gray-700">{order.buyer}</td>
-                    <td className="py-4 px-4 text-gray-700">{order.seller}</td>
-                    <td className="py-4 px-4 font-medium text-gray-900">{order.amount}</td>
+                  <tr key={order.id} className={`border-b hover:bg-opacity-50 ${
+                    darkMode 
+                      ? 'border-gray-600 hover:bg-gray-700' 
+                      : 'border-gray-100 hover:bg-gray-50'
+                  }`}>
+                    <td className={`py-4 px-4 font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{order.id}</td>
+                    <td className={`py-4 px-4 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{order.petName}</td>
+                    <td className={`py-4 px-4 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{order.buyer}</td>
+                    <td className={`py-4 px-4 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{order.seller}</td>
+                    <td className={`py-4 px-4 font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{order.amount}</td>
                     <td className="py-4 px-4 font-medium text-green-600">{order.commission}</td>
                     <td className="py-4 px-4">
                       <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusBadge(order.status)}`}>
@@ -281,24 +295,30 @@ const AdminDashboard = () => {
         </div>
 
         {/* Pending Approvals */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className={`rounded-lg shadow-md p-6 ${
+          darkMode ? 'bg-gray-800' : 'bg-white'
+        }`}>
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-gray-900">Pending Approvals</h2>
+            <h2 className={`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Pending Approvals</h2>
             <span className="bg-red-100 text-red-800 text-xs font-medium px-2 py-1 rounded-full">
               {pendingApprovals.length} pending
             </span>
           </div>
           <div className="space-y-4">
             {pendingApprovals.map((approval, index) => (
-              <div key={index} className="border border-gray-200 rounded-lg p-4">
+              <div key={index} className={`border rounded-lg p-4 ${
+                darkMode 
+                  ? 'border-gray-600 bg-gray-700' 
+                  : 'border-gray-200 bg-white'
+              }`}>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="font-medium text-gray-900">{approval.name}</span>
+                  <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{approval.name}</span>
                   <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getPriorityBadge(approval.priority)}`}>
                     {approval.priority}
                   </span>
                 </div>
-                <p className="text-sm text-gray-600 mb-2">{approval.seller}</p>
-                <p className="text-xs text-gray-500 mb-3">{approval.type}</p>
+                <p className={`text-sm mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>{approval.seller}</p>
+                <p className={`text-xs mb-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{approval.type}</p>
                 <div className="flex items-center space-x-2">
                   <button className="flex-1 bg-green-600 text-white text-xs py-2 px-3 rounded hover:bg-green-700 transition-colors">
                     <CheckCircle size={12} className="inline mr-1" />
@@ -317,31 +337,33 @@ const AdminDashboard = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* User Distribution */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6">User Distribution</h2>
+        <div className={`rounded-lg shadow-md p-6 ${
+          darkMode ? 'bg-gray-800' : 'bg-white'
+        }`}>
+          <h2 className={`text-lg font-semibold mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>User Distribution</h2>
           <div className="space-y-4">
             {userTypes.map((user, index) => (
               <div key={index}>
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm font-medium text-gray-700">{user.type}</span>
-                  <span className="text-sm text-gray-500">{user.count} users</span>
+                  <span className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{user.type}</span>
+                  <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{user.count} users</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-3">
+                <div className={`w-full rounded-full h-3 ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>
                   <div
                     className={`${user.color} h-3 rounded-full transition-all duration-300`}
                     style={{ width: `${user.percentage}%` }}
                   ></div>
                 </div>
                 <div className="text-right mt-1">
-                  <span className="text-xs text-gray-500">{user.percentage}%</span>
+                  <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{user.percentage}%</span>
                 </div>
               </div>
             ))}
           </div>
-          <div className="mt-6 pt-4 border-t border-gray-200">
+          <div className={`mt-6 pt-4 border-t ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-700">Total Platform Users</span>
-              <span className="text-lg font-bold text-gray-900">
+              <span className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Total Platform Users</span>
+              <span className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                 {userTypes.reduce((sum, user) => sum + user.count, 0).toLocaleString()}
               </span>
             </div>
@@ -349,21 +371,27 @@ const AdminDashboard = () => {
         </div>
 
         {/* Pet Categories Performance */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6">Pet Categories Performance</h2>
+        <div className={`rounded-lg shadow-md p-6 ${
+          darkMode ? 'bg-gray-800' : 'bg-white'
+        }`}>
+          <h2 className={`text-lg font-semibold mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Pet Categories Performance</h2>
           <div className="space-y-4">
             {petCategories.map((category, index) => (
-              <div key={index} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+              <div key={index} className={`flex items-center justify-between p-4 border rounded-lg ${
+                darkMode 
+                  ? 'border-gray-600 bg-gray-700' 
+                  : 'border-gray-200 bg-white'
+              }`}>
                 <div className="flex items-center space-x-3">
                   <div className={`w-4 h-4 rounded-full ${category.color}`}></div>
                   <div>
-                    <p className="font-medium text-gray-900">{category.category}</p>
-                    <p className="text-sm text-gray-500">{category.count} listings</p>
+                    <p className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{category.category}</p>
+                    <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{category.count} listings</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="font-medium text-gray-900">{category.revenue}</p>
-                  <p className="text-sm text-gray-500">Revenue</p>
+                  <p className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{category.revenue}</p>
+                  <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Revenue</p>
                 </div>
               </div>
             ))}
@@ -372,31 +400,57 @@ const AdminDashboard = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-6">Quick Administrative Actions</h2>
+      <div className={`rounded-lg shadow-md p-6 ${
+        darkMode ? 'bg-gray-800' : 'bg-white'
+      }`}>
+        <h2 className={`text-lg font-semibold mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Quick Administrative Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <button className="flex items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-colors group">
+          <button className={`flex items-center justify-center p-4 border-2 border-dashed rounded-lg hover:border-purple-500 transition-colors group ${
+            darkMode 
+              ? 'border-gray-600 hover:bg-gray-700' 
+              : 'border-gray-300 hover:bg-purple-50'
+          }`}>
             <div className="text-center">
               <UserCheck className="mx-auto mb-2 text-gray-400 group-hover:text-purple-500" size={24} />
-              <span className="text-sm font-medium text-gray-700 group-hover:text-purple-700">Verify Users</span>
+              <span className={`text-sm font-medium group-hover:text-purple-700 ${
+                darkMode ? 'text-gray-300' : 'text-gray-700'
+              }`}>Verify Users</span>
             </div>
           </button>
-          <button className="flex items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-colors group">
+          <button className={`flex items-center justify-center p-4 border-2 border-dashed rounded-lg hover:border-purple-500 transition-colors group ${
+            darkMode 
+              ? 'border-gray-600 hover:bg-gray-700' 
+              : 'border-gray-300 hover:bg-purple-50'
+          }`}>
             <div className="text-center">
               <BarChart3 className="mx-auto mb-2 text-gray-400 group-hover:text-purple-500" size={24} />
-              <span className="text-sm font-medium text-gray-700 group-hover:text-purple-700">Generate Reports</span>
+              <span className={`text-sm font-medium group-hover:text-purple-700 ${
+                darkMode ? 'text-gray-300' : 'text-gray-700'
+              }`}>Generate Reports</span>
             </div>
           </button>
-          <button className="flex items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-colors group">
+          <button className={`flex items-center justify-center p-4 border-2 border-dashed rounded-lg hover:border-purple-500 transition-colors group ${
+            darkMode 
+              ? 'border-gray-600 hover:bg-gray-700' 
+              : 'border-gray-300 hover:bg-purple-50'
+          }`}>
             <div className="text-center">
               <Ban className="mx-auto mb-2 text-gray-400 group-hover:text-purple-500" size={24} />
-              <span className="text-sm font-medium text-gray-700 group-hover:text-purple-700">Manage Suspensions</span>
+              <span className={`text-sm font-medium group-hover:text-purple-700 ${
+                darkMode ? 'text-gray-300' : 'text-gray-700'
+              }`}>Manage Suspensions</span>
             </div>
           </button>
-          <button className="flex items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-colors group">
+          <button className={`flex items-center justify-center p-4 border-2 border-dashed rounded-lg hover:border-purple-500 transition-colors group ${
+            darkMode 
+              ? 'border-gray-600 hover:bg-gray-700' 
+              : 'border-gray-300 hover:bg-purple-50'
+          }`}>
             <div className="text-center">
               <AlertTriangle className="mx-auto mb-2 text-gray-400 group-hover:text-purple-500" size={24} />
-              <span className="text-sm font-medium text-gray-700 group-hover:text-purple-700">Handle Disputes</span>
+              <span className={`text-sm font-medium group-hover:text-purple-700 ${
+                darkMode ? 'text-gray-300' : 'text-gray-700'
+              }`}>Handle Disputes</span>
             </div>
           </button>
         </div>

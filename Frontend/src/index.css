@@ -12,3 +12,127 @@
         transform: translateY(0);
     }
 }
+
+/* Global dark mode styles */
+:root {
+    color-scheme: light;
+}
+
+:root.dark {
+    color-scheme: dark;
+}
+
+/* Smooth transitions for theme changes */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Dark mode overrides for common classes */
+.dark .bg-white {
+    background-color: #1f2937 !important; /* gray-800 */
+}
+
+.dark .bg-gray-50 {
+    background-color: #111827 !important; /* gray-900 */
+}
+
+.dark .bg-gray-100 {
+    background-color: #374151 !important; /* gray-700 */
+}
+
+.dark .bg-gray-200 {
+    background-color: #4b5563 !important; /* gray-600 */
+}
+
+.dark .text-gray-900 {
+    color: #ffffff !important;
+}
+
+.dark .text-gray-800 {
+    color: #f3f4f6 !important; /* gray-100 */
+}
+
+.dark .text-gray-700 {
+    color: #e5e7eb !important; /* gray-200 */
+}
+
+.dark .text-gray-600 {
+    color: #d1d5db !important; /* gray-300 */
+}
+
+.dark .text-gray-500 {
+    color: #9ca3af !important; /* gray-400 */
+}
+
+.dark .border-gray-200 {
+    border-color: #4b5563 !important; /* gray-600 */
+}
+
+.dark .border-gray-300 {
+    border-color: #4b5563 !important; /* gray-600 */
+}
+
+.dark .border-gray-100 {
+    border-color: #374151 !important; /* gray-700 */
+}
+
+/* Dark mode hover states */
+.dark .hover\:bg-gray-50:hover {
+    background-color: #374151 !important; /* gray-700 */
+}
+
+.dark .hover\:bg-gray-100:hover {
+    background-color: #4b5563 !important; /* gray-600 */
+}
+
+/* Dark mode for inputs and forms */
+.dark input,
+.dark select,
+.dark textarea {
+    background-color: #374151 !important; /* gray-700 */
+    color: #ffffff !important;
+    border-color: #4b5563 !important; /* gray-600 */
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+    color: #9ca3af !important; /* gray-400 */
+}
+
+/* Dark mode for tables */
+.dark table {
+    color: #e5e7eb !important; /* gray-200 */
+}
+
+.dark th {
+    color: #d1d5db !important; /* gray-300 */
+    border-color: #4b5563 !important; /* gray-600 */
+}
+
+.dark td {
+    border-color: #4b5563 !important; /* gray-600 */
+}
+
+/* Custom scrollbar for dark mode */
+:root.dark ::-webkit-scrollbar {
+    width: 8px;
+}
+
+:root.dark ::-webkit-scrollbar-track {
+    background: #374151;
+}
+
+:root.dark ::-webkit-scrollbar-thumb {
+    background: #6b7280;
+    border-radius: 4px;
+}
+
+:root.dark ::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
+
+/* Selection colors for dark mode */
+:root.dark ::selection {
+    background: #7c3aed;
+    color: white;
+}
