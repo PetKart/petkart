@@ -1,7 +1,7 @@
 // BuyerIncome.jsx
 import React from 'react';
 
-const BuyerIncome = () => {
+const BuyerPayments = () => {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold">Income Page</h1>
@@ -10,4 +10,4 @@ const BuyerIncome = () => {
   );
 };
 
-export default BuyerIncome;
+export default BuyerPayments;
