@@ -8,6 +8,7 @@ import AdminPetCategories from "../pages/Admin/AdminPetCategories";
 import AdminRevenue from "../pages/Admin/AdminRevenue";
 import AdminSettings from "../pages/Admin/AdminSettings";
 import AdminOffers from "../pages/Admin/AdminOffers";
+import AdminReports from "../pages/Admin/AdminReports";
 
 const AdminRoutes = () => (
   <Routes>
@@ -18,6 +19,7 @@ const AdminRoutes = () => (
     <Route path="categories" element={<AdminPetCategories />} />
     <Route path="revenue" element={<AdminRevenue />} />
     <Route path="offers" element={<AdminOffers />} />
+    <Route path="reports" element={<AdminReports />} />
     <Route path="settings" element={<AdminSettings />} />
     {/* Add more admin routes here */}
   </Routes>
