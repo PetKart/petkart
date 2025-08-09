@@ -12,7 +12,11 @@ const ACCENT_COLOR = "#104137";
 const LOGO_SRC = "/assets/logo2.png";
 
 const sidebarLinks = {
-  ADMIN: [{ name: "Dashboard", path: "/admin/dashboard", icon: Home }],
+  ADMIN: [
+    { name: "Dashboard", path: "/admin/dashboard", icon: Home },
+    { name: "Users", path: "/admin/users", icon: Users },
+    { name: "Settings", path: "/admin/settings", icon: Settings }
+  ],
   PET_SHOP: [{ name: "Dashboard", path: "/petshop/dashboard", icon: Home }],
   SELLER: [
     { name: "Dashboard", path: "/seller/dashboard", icon: Home },
