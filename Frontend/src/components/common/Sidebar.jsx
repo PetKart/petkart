@@ -23,7 +23,11 @@ const sidebarLinks = {
     { name: "Articles", path: "/seller/articles", icon: Settings }
   ],
   BUYER: [
-    { name: "Dashboard", path: "/buyer/dashboard", icon: Home }
+    { name: "Dashboard", path: "/buyer/dashboard", icon: Home },
+    { name: "Pets", path: "/buyer/pets", icon: Package },
+    { name: "Orders", path: "/buyer/orders", icon: Users },
+    { name: "Income", path: "/buyer/income", icon: UserCheck },
+    { name: "Articles", path: "/buyer/articles", icon: Settings }
   ],
 
 };
