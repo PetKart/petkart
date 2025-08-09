@@ -243,3 +243,16 @@ function Sidebar({
 }
 
 export default Sidebar;
+// ...existing code...
+{/* Terms Agreement */}
+{/* 
+<div className="form-agreement">
+  <label className="checkbox-label">
+    <input type="checkbox" required />
+    <span className="checkmark"></span>✅ I agree to the{" "}
+    <a href="#">Terms of Service</a> and{" "}
+    <a href="#">Privacy Policy</a>
+  </label>
+</div>
+*/}
+// ...existing code...
