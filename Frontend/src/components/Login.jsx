@@ -72,7 +72,7 @@ const Navbar = ({ showSignupModal = false, setShowSignupModal = () => {} }) => {
         setSignupError(res);
       }
     } catch (err) {
-      setSignupError("Signup failed. Please try again.");
+      setSignupError(`Signup failed: ${err.message || "Please try again."}`);
     }
   };
 
@@ -104,7 +104,7 @@ const Navbar = ({ showSignupModal = false, setShowSignupModal = () => {} }) => {
         setLoginError(res);
       }
     } catch (err) {
-      setLoginError("Login failed. Please try again.");
+      setLoginError(`Login failed: ${err.message || "Please try again."}`);
     }
   };
 
@@ -596,7 +596,7 @@ const Navbar = ({ showSignupModal = false, setShowSignupModal = () => {} }) => {
         </div>
       )}
 
-      <style jsx>{`
+      <style jsx="true">{`
         :root {
           --primary-purple: #6a0dad;
           --secondary-purple: #ab47bc;
