@@ -17,38 +17,10 @@ const App = () => {
         <Router>
           <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route
-              path="/admin/*"
-              element={
-                <Layout admin>
-                  <AdminRoutes />
-                </Layout>
-              }
-            />
-            <Route
-              path="/petshop/*"
-              element={
-                <Layout petshop>
-                  <PetShopRoutes />
-                </Layout>
-              }
-            />
-            <Route
-              path="/seller/*"
-              element={
-                <Layout seller>
-                  <SellerRoutes />
-                </Layout>
-              }
-            />
-            <Route
-              path="/buyer/*"
-              element={
-                <Layout buyer>
-                  <BuyerRoutes />
-                </Layout>
-              }
-            />
+            <Route path="/admin/*"element={ <Layout admin><AdminRoutes /></Layout>}/>
+            <Route path="/petshop/*" element={<Layout petshop><PetShopRoutes /></Layout>}/>
+            <Route path="/seller/*" element={<Layout seller><SellerRoutes /></Layout>}/>
+            <Route path="/buyer/*" element={<Layout buyer><BuyerRoutes /></Layout>}/>
           </Routes>
         </Router>
       </UserProvider>
