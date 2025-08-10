@@ -32,7 +32,15 @@ const sidebarLinks = {
     { name: "Reports", path: "/admin/reports", icon: BarChart3 },
     { name: "Settings", path: "/admin/settings", icon: Settings },
   ],
-  PET_SHOP: [{ name: "Dashboard", path: "/petshop/dashboard", icon: Home }],
+  PET_SHOP: [
+    { name: "Dashboard", path: "/petshop/dashboard", icon: Home },
+    { name: "Home", path: "/petshop/home", icon: Home },
+    { name: "Add Pets", path: "/petshop/pets", icon: Package },
+    { name: "Add Offers", path: "/petshop/offers", icon: Package },
+    { name: "Orders", path: "/petshop/orders", icon: Users },
+    { name: "Income", path: "/petshop/income", icon: UserCheck },
+    { name: "Articles", path: "/petshop/articles", icon: Settings }
+  ],
   SELLER: [
     { name: "Dashboard", path: "/seller/dashboard", icon: Home },
     { name: "Add Pets", path: "/seller/pets", icon: Package },
